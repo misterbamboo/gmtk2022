@@ -64,7 +64,16 @@ namespace Assets.DiceGame.DiceGame.Combat.Application
         public void HitTarget(int damages)
         {
             if (targetEnemy == null) return;
-            targetEnemy.Hit(damages);
+
+            var enemyToHit = targetEnemy;
+            enemyToHit.Hit(damages);
+
+            if (enemyToHit.IsDead())
+            {
+                Target(null);
+                enemies.Remove(enemyToHit);
+                GameEvents.Raise(new EnemyKilledEvent(enemyToHit.Id));
+            }
         }
     }
 }

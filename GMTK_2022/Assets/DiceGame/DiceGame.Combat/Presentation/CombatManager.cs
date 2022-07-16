@@ -26,6 +26,7 @@ public class CombatManager : MonoBehaviour
         GameEvents.Subscribe<EnemySelectedEvent>(CombatController_EventsReceiver);
         GameEvents.Subscribe<EnemyUnselectedEvent>(CombatController_EventsReceiver);
         GameEvents.Subscribe<EnemyTakeDamageEvent>(CombatController_EventsReceiver);
+        GameEvents.Subscribe<EnemyKilledEvent>(CombatController_EventsReceiver);
     }
 
     private void Update()
@@ -68,6 +69,17 @@ public class CombatManager : MonoBehaviour
         if (gameEvent is EnemySelectedEvent) { }
         if (gameEvent is EnemyUnselectedEvent) { }
         if (gameEvent is EnemyTakeDamageEvent) ShakeRelatedEnemyComponent((EnemyTakeDamageEvent)gameEvent);
+        if (gameEvent is EnemyKilledEvent) DestroyEnemyComponent((EnemyKilledEvent)gameEvent);
+    }
+
+    private void DestroyEnemyComponent(EnemyKilledEvent gameEvent)
+    {
+        var enemyComponent = enemiesComponents.FirstOrDefault(c => c.GetEnemy()?.Id == gameEvent.Id);
+        if (enemyComponent != null)
+        {
+            enemiesComponents.Remove(enemyComponent);
+            Destroy(enemyComponent.gameObject);
+        }
     }
 
     private void ShakeRelatedEnemyComponent(EnemyTakeDamageEvent enemyTakeDamageEvent)

@@ -5,6 +5,7 @@ using Assets.DiceGame.Utils;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyComponent : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class EnemyComponent : MonoBehaviour
     [SerializeField] float maxLife = 100;
     [SerializeField] float life;
     [SerializeField] HealthBarComponent healthBar;
+    [SerializeField] Transform enemyImageTransform;
 
     private TrackValueChange<float, float> lifeRatioChanges = new TrackValueChange<float, float>();
 
@@ -46,17 +48,24 @@ public class EnemyComponent : MonoBehaviour
 
     private IEnumerator ShakeThis()
     {
-        var q = transform.rotation;
-        var eulerAngles = q.eulerAngles;
-        for (float i = 0; i < 10; i++)
-        {
-            var rotation = eulerAngles;
-            rotation.z = eulerAngles.z + (i % 2) * 2;
+        var initialTimestamp = Time.realtimeSinceStartup;
 
-            transform.rotation = Quaternion.Euler(rotation);
-            yield return new WaitForSeconds(0.1f);
+        var q = enemyImageTransform.rotation;
+        var eulerAngles = q.eulerAngles;
+
+        float durationInSecs = 0;
+        while (durationInSecs < 1)
+        {
+            durationInSecs = Time.realtimeSinceStartup - initialTimestamp;
+            var rotationOffset = Mathf.Sin(durationInSecs * 30) * 5;
+
+            var rotation = eulerAngles;
+            rotation.z = eulerAngles.z + rotationOffset;
+
+            enemyImageTransform.rotation = Quaternion.Euler(rotation);
+            yield return new WaitForEndOfFrame();
         }
-        transform.rotation = q;
+        enemyImageTransform.rotation = q;
     }
 
     private void OnDrawGizmos()

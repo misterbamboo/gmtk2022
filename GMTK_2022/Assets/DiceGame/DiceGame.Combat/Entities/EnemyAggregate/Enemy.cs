@@ -26,5 +26,10 @@ namespace Assets.DiceGame.DiceGame.Combat.Entities.EnemyAggregate
             Life -= damages;
             GameEvents.Raise(new EnemyTakeDamageEvent(Id, damages));
         }
+
+        public bool IsDead()
+        {
+            return Life <= 0;
+        }
     }
 }

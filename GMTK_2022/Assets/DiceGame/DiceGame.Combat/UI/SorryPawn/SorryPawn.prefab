@@ -51,6 +51,7 @@ MonoBehaviour:
   maxLife: 10
   life: 10
   healthBar: {fileID: 3600584835264509403}
+  enemyImageTransform: {fileID: 1404953755702159629}
 --- !u!61 &5776074926942704711
 BoxCollider2D:
   m_ObjectHideFlags: 0
