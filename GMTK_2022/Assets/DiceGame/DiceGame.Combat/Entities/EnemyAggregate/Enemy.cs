@@ -21,7 +21,7 @@ namespace Assets.DiceGame.DiceGame.Combat.Entities.EnemyAggregate
             Life = maxLife;
         }
 
-        public void Hit(int damages)
+        public void Hit(float damages)
         {
             Life -= damages;
             GameEvents.Raise(new EnemyTakeDamageEvent(Id, damages));

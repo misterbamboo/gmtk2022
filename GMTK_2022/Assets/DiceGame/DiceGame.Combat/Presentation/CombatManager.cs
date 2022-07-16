@@ -10,6 +10,10 @@ using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
+    public const string Tag = "CombatManager";
+
+    public bool HasTarget => combatController.HasTarget;
+
     [SerializeField] int minNumberOfEnemies = 1;
     [SerializeField] int maxNumberOfEnemies = 4;
     [SerializeField] List<EnemyPrefabDefinition> enemyPrefabs;
@@ -32,7 +36,6 @@ public class CombatManager : MonoBehaviour
     private void Update()
     {
         UpdateTarget();
-        CheckHitTarget();
     }
 
     private void UpdateTarget()
@@ -50,12 +53,9 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    private void CheckHitTarget()
+    public void HitTarget(float damages)
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            combatController.HitTarget(10);
-        }
+        combatController.HitTarget(damages);
     }
 
     public void StartNewCombat()

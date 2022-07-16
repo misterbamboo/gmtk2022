@@ -8,6 +8,8 @@ namespace Assets.DiceGame.DiceGame.Combat.Application
 {
     public class CombatController
     {
+        public bool HasTarget => targetEnemy != null;
+
         public List<Enemy> enemies { get; private set; }
 
         private readonly int minNumberOfEnnemies;
@@ -61,7 +63,7 @@ namespace Assets.DiceGame.DiceGame.Combat.Application
             }
         }
 
-        public void HitTarget(int damages)
+        public void HitTarget(float damages)
         {
             if (targetEnemy == null) return;
 

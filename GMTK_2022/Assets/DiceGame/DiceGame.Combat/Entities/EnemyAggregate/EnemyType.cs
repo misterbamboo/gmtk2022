@@ -9,6 +9,8 @@ namespace Assets.DiceGame.DiceGame.Combat.Entities.EnemyAggregate
     public enum EnemyType
     {
         ChessKing,
-        SorryPawn
+        SorryPawn,
+        Domino,
+        Iron
     }
 }
