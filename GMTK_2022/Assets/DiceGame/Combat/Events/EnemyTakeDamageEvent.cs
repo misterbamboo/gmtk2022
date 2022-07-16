@@ -15,7 +15,7 @@ namespace Assets.DiceGame.Combat.Events
 
         public override string ToString()
         {
-            return $"EnemyTakeDamageEvent: Id={Id}, Damages={Damages}";
+            return $"{GetType().Name}: EnemyId={Id}, Damages={Damages}";
         }
     }
 }

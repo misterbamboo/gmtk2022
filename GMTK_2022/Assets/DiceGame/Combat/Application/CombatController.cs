@@ -10,24 +10,30 @@ namespace Assets.DiceGame.Combat.Application
     {
         public bool HasTarget => targetEnemy != null;
 
-        public List<Enemy> enemies { get; private set; }
+        public Player Player { get; private set; }
+        private float playerDefaultLife;
+
+        public List<Enemy> Enemies { get; private set; }
 
         private readonly int minNumberOfEnnemies;
         private readonly int maxNumberOfEnemies;
         private readonly IDictionary<EnemyType, float> enemiesDefaultLife;
+
         private Enemy targetEnemy;
 
-        public CombatController(int minNumberOfEnnemies, int maxNumberOfEnemies, IDictionary<EnemyType, float> enemiesDefaultLife)
+        public CombatController(int minNumberOfEnnemies, int maxNumberOfEnemies, IDictionary<EnemyType, float> enemiesDefaultLife, float playerDefaultLife)
         {
             this.minNumberOfEnnemies = minNumberOfEnnemies;
             this.maxNumberOfEnemies = maxNumberOfEnemies;
             this.enemiesDefaultLife = enemiesDefaultLife;
-            enemies = new List<Enemy>(maxNumberOfEnemies);
+            this.playerDefaultLife = playerDefaultLife;
+            Enemies = new List<Enemy>(maxNumberOfEnemies);
+            Player = new Player(playerDefaultLife);
         }
 
         public void NewCombat()
         {
-            enemies.Clear();
+            Enemies.Clear();
 
             var count = UnityEngine.Random.Range(minNumberOfEnnemies, maxNumberOfEnemies + 1);
             var enemyTypeValues = Enum.GetValues(typeof(EnemyType));
@@ -36,8 +42,10 @@ namespace Assets.DiceGame.Combat.Application
                 var enemyTypeIndex = UnityEngine.Random.Range(0, enemyTypeValues.Length);
                 var enemyType = (EnemyType)enemyTypeValues.GetValue(enemyTypeIndex);
                 var life = enemiesDefaultLife[enemyType];
-                enemies.Add(new Enemy(enemyType, life));
+                Enemies.Add(new Enemy(enemyType, life));
             }
+
+            Player = new Player(playerDefaultLife);
 
             GameEvents.Raise(new NewCombatReadyEvent());
         }
@@ -79,7 +87,7 @@ namespace Assets.DiceGame.Combat.Application
             if (enemyToHit.IsDead())
             {
                 UnfocusTarget();
-                enemies.Remove(enemyToHit);
+                Enemies.Remove(enemyToHit);
                 GameEvents.Raise(new EnemyKilledEvent(enemyToHit.Id));
             }
         }

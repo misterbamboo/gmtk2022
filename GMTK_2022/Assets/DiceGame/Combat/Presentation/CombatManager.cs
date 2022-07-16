@@ -14,6 +14,11 @@ public class CombatManager : MonoBehaviour
 
     public bool HasTarget => combatController.HasTarget;
 
+    [Header("Player")]
+    [SerializeField] PlayerComponent playerPrefab;
+    [SerializeField] float playerMaxLife = 20;
+
+    [Header("Enemies")]
     [SerializeField] int minNumberOfEnemies = 1;
     [SerializeField] int maxNumberOfEnemies = 4;
     [SerializeField] List<EnemyPrefabDefinition> enemyPrefabs;
@@ -24,13 +29,14 @@ public class CombatManager : MonoBehaviour
 
     void Start()
     {
-        var lifeConfig = enemyPrefabs.ToDictionary(ep => ep.type, ep => ep.component.GetMaxLife());
-        combatController = new CombatController(minNumberOfEnemies, maxNumberOfEnemies, lifeConfig);
-        GameEvents.Subscribe<NewCombatReadyEvent>(CombatController_EventsReceiver);
-        GameEvents.Subscribe<EnemySelectedEvent>(CombatController_EventsReceiver);
-        GameEvents.Subscribe<EnemyUnselectedEvent>(CombatController_EventsReceiver);
-        GameEvents.Subscribe<EnemyTakeDamageEvent>(CombatController_EventsReceiver);
-        GameEvents.Subscribe<EnemyKilledEvent>(CombatController_EventsReceiver);
+        var lifeConfig = enemyPrefabs.ToDictionary(ep => ep.type, ep => ep.maxLife);
+        combatController = new CombatController(minNumberOfEnemies, maxNumberOfEnemies, lifeConfig, playerMaxLife);
+        GameEvents.Subscribe<NewCombatReadyEvent>(EventsReceiver);
+        GameEvents.Subscribe<EnemySelectedEvent>(EventsReceiver);
+        GameEvents.Subscribe<EnemyUnselectedEvent>(EventsReceiver);
+        GameEvents.Subscribe<EnemyTakeDamageEvent>(EventsReceiver);
+        GameEvents.Subscribe<EnemyKilledEvent>(EventsReceiver);
+        combatController.NewCombat();
     }
 
     private void Update()
@@ -58,12 +64,7 @@ public class CombatManager : MonoBehaviour
         combatController.HitTarget(damages);
     }
 
-    public void StartNewCombat()
-    {
-        combatController.NewCombat();
-    }
-
-    private void CombatController_EventsReceiver(IGameEvent gameEvent)
+    private void EventsReceiver(IGameEvent gameEvent)
     {
         if (gameEvent is NewCombatReadyEvent) InitGameObjects();
         if (gameEvent is EnemySelectedEvent) { }
@@ -96,7 +97,7 @@ public class CombatManager : MonoBehaviour
         ClearEnemiesGameObjects();
 
         float index = 0;
-        foreach (var enemy in combatController.enemies)
+        foreach (var enemy in combatController.Enemies)
         {
             var prefab = GetEnemyPrefab(enemy.Type);
 
@@ -107,6 +108,8 @@ public class CombatManager : MonoBehaviour
             enemiesComponents.Add(enemyComponent);
             index++;
         }
+
+        Instantiate(playerPrefab, new Vector3(-25, 0, 0), Quaternion.identity);
     }
 
     private void ClearEnemiesGameObjects()

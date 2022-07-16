@@ -6,7 +6,7 @@ namespace Assets.DiceGame.Combat.Events
     {
         public override string ToString()
         {
-            return $"NewCombatReadyEvent";
+            return $"{GetType().Name}";
         }
     }
 }

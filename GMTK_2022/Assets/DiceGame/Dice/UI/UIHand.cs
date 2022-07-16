@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.DiceGame.SharedKernel;
+using Assets.DiceGame.Turn.Events;
 using DiceGame;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +29,8 @@ public class UIHand : MonoBehaviour
     [SerializeField] private float rollPerSeconds = 10f;
     [SerializeField] private CombatManager combatManager;
     private Hand hand;
+
+    private int currentPlayerIndex;
     private int diceUsed = 0;
 
     private List<UIDice> availableUiDices = new List<UIDice>();
@@ -36,11 +40,27 @@ public class UIHand : MonoBehaviour
     void Start()
     {
         hand = new Hand();
-        ResetHand();
+
+        GameEvents.Subscribe<TurnStartedEvent>(EventReceiver);
     }
 
-    private void ResetHand()
+    private void EventReceiver(IGameEvent gameEvent)
     {
+        if (gameEvent is TurnStartedEvent)
+        {
+            var playerIndex = ((TurnStartedEvent)gameEvent).PlayerIndex;
+            
+            // Player 0: Keyboard and mouse player
+            if (playerIndex == 0)
+            {
+                ResetHand(playerIndex);
+            }
+        }
+    }
+
+    private void ResetHand(int playerIndex)
+    {
+        this.currentPlayerIndex = playerIndex;
         diceUsed = 0;
         hand.ResetDice(new List<Dice>()
         {
@@ -203,7 +223,7 @@ public class UIHand : MonoBehaviour
 
     public void EndTurn()
     {
-        ResetHand();
+        GameEvents.Raise(new TurnEndedEvent(currentPlayerIndex));
     }
 
     public IEnumerable<UIDice> ToBeDiscarded(int index) => availableUiDices.Where(d => d.Value < availableUiDices[index].Value);

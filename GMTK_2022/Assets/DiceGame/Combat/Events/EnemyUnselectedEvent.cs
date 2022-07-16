@@ -13,7 +13,7 @@ namespace Assets.DiceGame.Combat.Events
 
         public override string ToString()
         {
-            return $"EnemyUnselectedEvent: Id={Id}";
+            return $"{GetType().Name}: EnemyId={Id}";
         }
     }
 }

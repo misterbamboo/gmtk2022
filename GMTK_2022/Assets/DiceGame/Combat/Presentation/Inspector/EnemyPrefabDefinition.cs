@@ -8,5 +8,6 @@ namespace Assets.DiceGame.Combat.Presentation.Inspector
     {
         public EnemyType type;
         public EnemyComponent component;
+        public float maxLife;
     }
 }

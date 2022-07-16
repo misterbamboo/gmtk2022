@@ -31,11 +31,6 @@ public class EnemyComponent : MonoBehaviour
         return enemy;
     }
 
-    public float GetMaxLife()
-    {
-        return maxLife;
-    }
-
     void Start()
     {
         life = maxLife;

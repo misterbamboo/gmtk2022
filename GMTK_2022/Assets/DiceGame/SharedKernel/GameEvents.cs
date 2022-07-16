@@ -9,16 +9,6 @@ namespace Assets.DiceGame.SharedKernel
     {
         public static Dictionary<Type, List<Action<IGameEvent>>> subscribers = new();
 
-        internal static void Unsubscribe<T>(Action<T> takeDamageSubscription)
-             where T : IGameEvent
-        {
-            var type = typeof(T);
-            if (!subscribers.ContainsKey(type))
-            {
-                subscribers[type] = new List<Action<IGameEvent>>();
-            }
-        }
-
         public static void Subscribe<T>(Action<T> subscriberAction)
            where T : IGameEvent
         {
