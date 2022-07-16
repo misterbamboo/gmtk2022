@@ -44,20 +44,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eeb14c0dacdd344982bff46b187207e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 3805812645920653931, guid: 0b0105bcb2179024d90852eadd1d9ba7, type: 3}
-  playerMaxLife: 20
+  characterDisplayOffsetY: -1.5
+  playerPrefab:
+    component: {fileID: 7689515229004171857, guid: 0b0105bcb2179024d90852eadd1d9ba7, type: 3}
+    maxLife: 20
   minNumberOfEnemies: 1
   maxNumberOfEnemies: 4
   enemyPrefabs:
-  - type: 0
-    component: {fileID: 5210734252980750272, guid: 155287d0afbef244f85c8a4de0854b21, type: 3}
-    maxLife: 100
   - type: 1
     component: {fileID: 541977926615734459, guid: b3f6c28877bcf7043b8aeb5473f9992b, type: 3}
-    maxLife: 10
-  - type: 2
-    component: {fileID: 7581195478603273851, guid: 323db4d9263388640854574041a7594f, type: 3}
-    maxLife: 40
+    stats:
+      attackPower: 1
+      defencePower: 1
+      maxLife: 10
   - type: 3
     component: {fileID: 1022947153238703328, guid: d5dbb222b39564a47a75babc74b37e80, type: 3}
-    maxLife: 20
+    stats:
+      attackPower: 2
+      defencePower: 1
+      maxLife: 25
+  - type: 2
+    component: {fileID: 7581195478603273851, guid: 323db4d9263388640854574041a7594f, type: 3}
+    stats:
+      attackPower: 5
+      defencePower: 10
+      maxLife: 50
+  - type: 0
+    component: {fileID: 5210734252980750272, guid: 155287d0afbef244f85c8a4de0854b21, type: 3}
+    stats:
+      attackPower: 20
+      defencePower: 40
+      maxLife: 100

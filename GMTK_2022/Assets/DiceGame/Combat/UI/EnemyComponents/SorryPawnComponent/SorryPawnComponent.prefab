@@ -51,7 +51,7 @@ MonoBehaviour:
   maxLife: 10
   life: 10
   healthBar: {fileID: 3600584835264509403}
-  enemyImageTransform: {fileID: 1404953755702159629}
+  imageTransform: {fileID: 1404953755702159629}
 --- !u!61 &5776074926942704711
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -352,6 +352,22 @@ PrefabInstance:
     - target: {fileID: 1026888435008471017, guid: 8924245244561e44b936fe343a5dc633, type: 3}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1026888435008471019, guid: 8924245244561e44b936fe343a5dc633, type: 3}
+      propertyPath: m_Color.b
+      value: 0.41667747
+      objectReference: {fileID: 0}
+    - target: {fileID: 1026888435008471019, guid: 8924245244561e44b936fe343a5dc633, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1026888435008471019, guid: 8924245244561e44b936fe343a5dc633, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3923381678228387046, guid: 8924245244561e44b936fe343a5dc633, type: 3}
+      propertyPath: isEnemy
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8924245244561e44b936fe343a5dc633, type: 3}

@@ -1,35 +1,15 @@
-using Assets.DiceGame.Combat.Entities.EnemyAggregate;
-using Assets.DiceGame.Combat.Events;
-using Assets.DiceGame.SharedKernel;
 using Assets.DiceGame.Utils;
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class EnemyComponent : MonoBehaviour
+public abstract class LivingComponent : MonoBehaviour
 {
-    public const string LayerMaskName = "Enemy";
-
-    [SerializeField] float maxLife = 100;
-    [SerializeField] float life;
-    [SerializeField] HealthBarComponent healthBar;
-    [SerializeField] Transform enemyImageTransform;
+    [SerializeField] protected float maxLife = 100;
+    [SerializeField] protected float life;
+    [SerializeField] protected HealthBarComponent healthBar;
+    [SerializeField] protected Transform imageTransform;
 
     private TrackValueChange<float, float> lifeRatioChanges = new TrackValueChange<float, float>();
-
-    Action<EnemyTakeDamageEvent> takeDamageSubscription;
-
-    private Enemy enemy;
-    public void SetEnemy(Enemy enemy)
-    {
-        this.enemy = enemy;
-    }
-
-    public Enemy GetEnemy()
-    {
-        return enemy;
-    }
 
     void Start()
     {
@@ -45,7 +25,7 @@ public class EnemyComponent : MonoBehaviour
     {
         var initialTimestamp = Time.realtimeSinceStartup;
 
-        var q = enemyImageTransform.rotation;
+        var q = imageTransform.rotation;
         var eulerAngles = q.eulerAngles;
 
         float durationInSecs = 0;
@@ -57,10 +37,10 @@ public class EnemyComponent : MonoBehaviour
             var rotation = eulerAngles;
             rotation.z = eulerAngles.z + rotationOffset;
 
-            enemyImageTransform.rotation = Quaternion.Euler(rotation);
+            imageTransform.rotation = Quaternion.Euler(rotation);
             yield return new WaitForEndOfFrame();
         }
-        enemyImageTransform.rotation = q;
+        imageTransform.rotation = q;
     }
 
     private void OnDrawGizmos()
@@ -75,14 +55,7 @@ public class EnemyComponent : MonoBehaviour
         UpdateLifeRatio();
     }
 
-    private void UpdateEnemyInfo()
-    {
-        if (enemy != null)
-        {
-            life = enemy.Life;
-            maxLife = enemy.MaxLife;
-        }
-    }
+    protected abstract void UpdateEnemyInfo();
 
     private void UpdateLifeRatio()
     {

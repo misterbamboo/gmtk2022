@@ -4,6 +4,7 @@ using Assets.DiceGame.Combat.Events;
 using Assets.DiceGame.Combat.Presentation.Exceptions;
 using Assets.DiceGame.Combat.Presentation.Inspector;
 using Assets.DiceGame.SharedKernel;
+using Assets.DiceGame.Turn.Events;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,9 +15,11 @@ public class CombatManager : MonoBehaviour
 
     public bool HasTarget => combatController.HasTarget;
 
+    [Header("UI")]
+    [SerializeField] float characterDisplayOffsetY = -1.5f;
+
     [Header("Player")]
-    [SerializeField] PlayerComponent playerPrefab;
-    [SerializeField] float playerMaxLife = 20;
+    [SerializeField] PlayerPrefabDefinition playerPrefab;
 
     [Header("Enemies")]
     [SerializeField] int minNumberOfEnemies = 1;
@@ -24,18 +27,20 @@ public class CombatManager : MonoBehaviour
     [SerializeField] List<EnemyPrefabDefinition> enemyPrefabs;
 
     List<EnemyComponent> enemiesComponents = new List<EnemyComponent>();
+    private PlayerComponent playerComponent;
 
     private CombatController combatController;
 
     void Start()
     {
-        var lifeConfig = enemyPrefabs.ToDictionary(ep => ep.type, ep => ep.maxLife);
-        combatController = new CombatController(minNumberOfEnemies, maxNumberOfEnemies, lifeConfig, playerMaxLife);
+        var enemyStatsPerType = enemyPrefabs.ToDictionary(ep => ep.type, ep => (IEnemyStats)ep.stats);
+        combatController = new CombatController(minNumberOfEnemies, maxNumberOfEnemies, enemyStatsPerType, playerPrefab.maxLife);
         GameEvents.Subscribe<NewCombatReadyEvent>(EventsReceiver);
         GameEvents.Subscribe<EnemySelectedEvent>(EventsReceiver);
         GameEvents.Subscribe<EnemyUnselectedEvent>(EventsReceiver);
         GameEvents.Subscribe<EnemyTakeDamageEvent>(EventsReceiver);
         GameEvents.Subscribe<EnemyKilledEvent>(EventsReceiver);
+        GameEvents.Subscribe<TurnStartedEvent>((e) => combatController.OnTurnStarted(e));
         combatController.NewCombat();
     }
 
@@ -49,19 +54,18 @@ public class CombatManager : MonoBehaviour
         var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.down, 1f, LayerMask.GetMask(EnemyComponent.LayerMaskName));
         if (hit.collider == null)
         {
-            combatController.UnfocusTarget();
+            combatController.OnUnfocusEnemy();
         }
         else
         {
             var enemyComponent = hit.collider.GetComponent<EnemyComponent>();
-            var enemy = enemyComponent.GetEnemy();
-            combatController.Target(enemy);
+            combatController.OnFocusEnemy(enemyComponent.Enemy);
         }
     }
 
     public void HitTarget(float damages)
     {
-        combatController.HitTarget(damages);
+        combatController.HitFocusEnemy(damages);
     }
 
     private void EventsReceiver(IGameEvent gameEvent)
@@ -75,7 +79,7 @@ public class CombatManager : MonoBehaviour
 
     private void DestroyEnemyComponent(EnemyKilledEvent gameEvent)
     {
-        var enemyComponent = enemiesComponents.FirstOrDefault(c => c.GetEnemy()?.Id == gameEvent.Id);
+        var enemyComponent = enemiesComponents.FirstOrDefault(c => c.Enemy?.Id == gameEvent.Id);
         if (enemyComponent != null)
         {
             enemiesComponents.Remove(enemyComponent);
@@ -85,7 +89,7 @@ public class CombatManager : MonoBehaviour
 
     private void ShakeRelatedEnemyComponent(EnemyTakeDamageEvent enemyTakeDamageEvent)
     {
-        var enemyComponent = enemiesComponents.FirstOrDefault(c => c.GetEnemy()?.Id == enemyTakeDamageEvent.Id);
+        var enemyComponent = enemiesComponents.FirstOrDefault(c => c.Enemy?.Id == enemyTakeDamageEvent.Id);
         if (enemyComponent != null)
         {
             enemyComponent.Shake();
@@ -101,15 +105,16 @@ public class CombatManager : MonoBehaviour
         {
             var prefab = GetEnemyPrefab(enemy.Type);
 
-            var x = index;
-            var y = (index % 2) / 2;
+            var x = index * 1.5f;
+            var y = (index % 2) + characterDisplayOffsetY;
             var enemyComponent = Instantiate(prefab, new Vector3(x, y, 0), Quaternion.identity);
-            enemyComponent.SetEnemy(enemy);
+            enemyComponent.Enemy = enemy;
             enemiesComponents.Add(enemyComponent);
             index++;
         }
 
-        Instantiate(playerPrefab, new Vector3(-25, 0, 0), Quaternion.identity);
+        playerComponent = Instantiate(playerPrefab.component, new Vector3(-4, characterDisplayOffsetY, 0), Quaternion.identity);
+        playerComponent.Player = combatController.Player;
     }
 
     private void ClearEnemiesGameObjects()
