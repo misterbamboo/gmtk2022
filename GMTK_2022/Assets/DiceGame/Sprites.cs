@@ -28,7 +28,8 @@ namespace DiceGame
             }
             else
             {
-                throw new Exception($"{name} is not a valid sprite name");
+                Debug.LogError($"sprite {name} was not found");
+                return spriteDict["missing_sprite"];
             }
         }
     }
