@@ -1,4 +1,4 @@
-using Assets.DiceGame.Combat.Entities.EnemyAggregate;
+using Assets.DiceGame.Combat.Entities;
 
 public class PlayerComponent : LivingComponent
 {

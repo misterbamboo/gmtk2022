@@ -41,20 +41,14 @@ public class UIHand : MonoBehaviour
     {
         hand = new Hand();
 
-        GameEvents.Subscribe<TurnStartedEvent>(EventReceiver);
+        GameEvents.Subscribe<TurnStartedEvent>(OnTurnStarted);
     }
 
-    private void EventReceiver(IGameEvent gameEvent)
+    private void OnTurnStarted(TurnStartedEvent turnStartedEvent)
     {
-        if (gameEvent is TurnStartedEvent)
+        if (turnStartedEvent.IsHumanPlayer())
         {
-            var playerIndex = ((TurnStartedEvent)gameEvent).PlayerIndex;
-            
-            // Player 0: Keyboard and mouse player
-            if (playerIndex == 0)
-            {
-                ResetHand(playerIndex);
-            }
+            ResetHand(turnStartedEvent.PlayerIndex);
         }
     }
 

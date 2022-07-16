@@ -1,4 +1,5 @@
 ﻿using Assets.DiceGame.SharedKernel;
+using System;
 
 namespace Assets.DiceGame.Turn.Events
 {
@@ -11,6 +12,16 @@ namespace Assets.DiceGame.Turn.Events
         {
             PlayerIndex = playerTurnIndex;
             NumberOfPlayers = numberOfPlayers;
+        }
+
+        public bool IsEnemyPlayerTurn()
+        {
+            return PlayerIndex != 0;
+        }
+
+        public bool IsHumanPlayer()
+        {
+            return PlayerIndex == 0;
         }
 
         public override string ToString()
