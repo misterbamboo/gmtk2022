@@ -1,4 +1,4 @@
-﻿using Assets.DiceGame.DiceGame.Combat.Entities.Events;
+﻿using Assets.DiceGame.Combat.Events;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
