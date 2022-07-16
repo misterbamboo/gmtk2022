@@ -1,15 +1,15 @@
 ﻿
 namespace Assets.DiceGame.Combat.Entities.CombatActionAggregate
 {
-    public class CombatAction
+    public class EnemyDecision
     {
-        private CombatActionType Action { get; }
+        private EnemyDecisionType Decision { get; }
         private int SourceId { get; }
         private int TargetId { get; }
 
-        public CombatAction(CombatActionType action, int sourceId, int targetId)
+        public EnemyDecision(EnemyDecisionType action, int sourceId, int targetId)
         {
-            Action = action;
+            Decision = action;
             SourceId = sourceId;
             TargetId = targetId;
         }

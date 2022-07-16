@@ -18,10 +18,10 @@ namespace Assets.DiceGame.Combat.Application
 
         public void EnemiesTakeActions()
         {
-            var actions = new List<CombatAction>();
+            var actions = new List<EnemyDecision>();
             foreach (Enemy enemy in enemies)
             {
-                actions.Add(enemy.TakeAction(player, enemies));
+                actions.Add(enemy.TakeDecision(player, enemies));
             }
         }
     }

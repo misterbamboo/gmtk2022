@@ -33,7 +33,11 @@ public class CombatManager : MonoBehaviour
 
     void Start()
     {
-        var enemyStatsPerType = enemyPrefabs.ToDictionary(ep => ep.type, ep => (IEnemyStats)ep.stats);
+        var enemyStatsPerType = enemyPrefabs.ToDictionary(ep => ep.type, ep => (ICharacterStats)ep.stats);
+
+
+
+
         combatController = new CombatController(minNumberOfEnemies, maxNumberOfEnemies, enemyStatsPerType, playerPrefab.maxLife);
         GameEvents.Subscribe<NewCombatReadyEvent>(EventsReceiver);
         GameEvents.Subscribe<EnemySelectedEvent>(EventsReceiver);

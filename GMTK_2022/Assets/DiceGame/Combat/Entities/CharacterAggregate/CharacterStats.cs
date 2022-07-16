@@ -1,14 +1,13 @@
 ﻿namespace Assets.DiceGame.Combat.Entities.EnemyAggregate
 {
-    public interface IEnemyStats
+    public interface ICharacterStats
     {
         float Attack { get; }
         float Defence { get; }
         float MaxLife { get; }
     }
 
-
-    public class EnemyStats : IEnemyStats
+    public class CharacterStats : ICharacterStats
     {
         public float Attack { get; set; }
 

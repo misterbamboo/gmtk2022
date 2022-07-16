@@ -16,14 +16,14 @@ namespace Assets.DiceGame.Combat.Entities.EnemyAggregate
         public float Defence { get; private set; }
         public float Attack { get; private set; }
 
-        public Enemy(EnemyType type, IEnemyStats enemyStats)
+        public Enemy(EnemyType type, ICharacterStats stats)
         {
             Id = ++nextId;
             Type = type;
-            MaxLife = enemyStats.MaxLife;
-            Life = enemyStats.MaxLife;
-            Attack = enemyStats.Attack;
-            Defence = enemyStats.Defence;
+            MaxLife = stats.MaxLife;
+            Life = stats.MaxLife;
+            Attack = stats.Attack;
+            Defence = stats.Defence;
         }
 
         public void Hit(float damages)
@@ -32,7 +32,7 @@ namespace Assets.DiceGame.Combat.Entities.EnemyAggregate
             GameEvents.Raise(new EnemyTakeDamageEvent(Id, damages));
         }
 
-        public virtual CombatAction TakeAction(Player player, List<Enemy> enemies)
+        public virtual EnemyDecision TakeDecision(Player player, List<Enemy> enemies)
         {
             if (Attack > player.Life)
             {
@@ -48,14 +48,14 @@ namespace Assets.DiceGame.Combat.Entities.EnemyAggregate
             }
         }
 
-        private CombatAction ChooseAttack()
+        private EnemyDecision ChooseAttack()
         {
-            return new CombatAction(CombatActionType.Attack, Id, Player.Id);
+            return new EnemyDecision(EnemyDecisionType.Attack, Id, Player.Id);
         }
 
-        private CombatAction ChooseDefence()
+        private EnemyDecision ChooseDefence()
         {
-            return new CombatAction(CombatActionType.Defence, Id, Id);
+            return new EnemyDecision(EnemyDecisionType.Defence, Id, Id);
         }
 
         public bool IsDead()

@@ -13,7 +13,7 @@ namespace Assets.DiceGame.Combat.Presentation.Inspector
     }
 
     [Serializable]
-    public class EnemyStatsDefinition : IEnemyStats
+    public class EnemyStatsDefinition : ICharacterStats
     {
         [SerializeField] float attackPower;
         public float Attack => attackPower;

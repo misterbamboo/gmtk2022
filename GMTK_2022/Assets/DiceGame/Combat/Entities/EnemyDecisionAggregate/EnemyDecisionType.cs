@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.DiceGame.Combat.Entities.CombatActionAggregate
 {
-    public enum CombatActionType
+    public enum EnemyDecisionType
     {
         Attack,
         Defence,
