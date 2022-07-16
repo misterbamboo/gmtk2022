@@ -43,6 +43,11 @@ namespace DiceGame
             var faceSide = (FaceSides)Random.Range(1, 7);
             FaceTowards(faceSide);
         }
+
+        public Face GetFace(FaceSides side)
+        {
+            return faces[(int)side - 1];
+        }
     }
 }
 

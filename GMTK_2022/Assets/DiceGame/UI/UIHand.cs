@@ -1,7 +1,15 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DiceGame;
 using UnityEngine;
+using UnityEngine.UI;
+
+public enum HandState
+{
+    Selection,
+    Roll,
+}
 
 public class UIHand : MonoBehaviour
 {
@@ -9,10 +17,15 @@ public class UIHand : MonoBehaviour
     [SerializeField] private GameObject uiDiscardedDicePrefab;
     [SerializeField] private Transform discardedUI;
     [SerializeField] private Transform availableUI;
-
+    [SerializeField] private Button rollButton;
+    [SerializeField] private Image diceCover;
+    [SerializeField] private float rollTime = 1f;
+    [SerializeField] private float rollPerSeconds = 10f;
     private Hand hand;
 
     private List<UIDice> availableUiDices = new List<UIDice>();
+
+    public HandState State { get; private set; }
 
     void Start()
     {
@@ -27,13 +40,26 @@ public class UIHand : MonoBehaviour
             Dice.WithValue(6)
         });
 
-        RedrawDice();
+        State = HandState.Roll;
+        RedrawUI();
     }
 
-    public void RedrawDice()
+    public void RedrawUI()
     {
         DestroyDice();
         CreateDice();
+        UpdateButton();
+        UpdateCover();
+    }
+
+    private void UpdateButton()
+    {
+        rollButton.interactable = State == HandState.Roll;
+    }
+
+    private void UpdateCover()
+    {
+        diceCover.enabled = State != HandState.Selection;
     }
 
     private void CreateDice()
@@ -71,8 +97,12 @@ public class UIHand : MonoBehaviour
 
     public void Select(int index)
     {
+        if (State != HandState.Selection) return;
+
         _ = hand.SelectDice(index);
-        RedrawDice();
+
+        State = HandState.Roll;
+        RedrawUI();
     }
 
     public void HoverDiceEnter(int index)
@@ -89,6 +119,37 @@ public class UIHand : MonoBehaviour
         {
             d.HoverDiscardExit();
         }
+    }
+
+    public void Roll()
+    {
+        if (State != HandState.Roll) return;
+
+        StartCoroutine(RollCoroutine());
+    }
+
+    private IEnumerator RollCoroutine()
+    {
+        var totaltime = 0f;
+        var time = 0f;
+
+        while (totaltime < rollTime)
+        {
+            time += Time.deltaTime;
+            totaltime += Time.deltaTime;
+            if (time > 1f / rollPerSeconds)
+            {
+                time = 0f;
+                availableUiDices.ForEach(d => d.FakeRoll());
+            }
+
+            yield return null;
+        }
+
+        hand.Roll();
+        State = HandState.Selection;
+
+        RedrawUI();
     }
 
     public IEnumerable<UIDice> ToBeDiscarded(int index) => availableUiDices.Where(d => d.Value < availableUiDices[index].Value);

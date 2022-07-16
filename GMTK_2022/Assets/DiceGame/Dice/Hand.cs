@@ -11,7 +11,6 @@ namespace DiceGame
 
         public Hand()
         {
-
         }
 
         public IEnumerable<Dice> AvailableDice => availableDice;
@@ -29,20 +28,28 @@ namespace DiceGame
             var selectedDice = availableDice[index];
             availableDice.RemoveAt(index);
 
-            discardedDice.AddRange(DiceToDiscard(index));
-            availableDice = DiceToKeep(index).ToList();
+            discardedDice.AddRange(DiceToDiscard(selectedDice.Value));
+            availableDice = DiceToKeep(selectedDice.Value).ToList();
 
             return selectedDice;
         }
 
-        public IEnumerable<Dice> DiceToDiscard(int index) => availableDice.Where(d => d.Value < availableDice[index].Value);
-        public IEnumerable<Dice> DiceToKeep(int index) => availableDice.Where(d => d.Value >= availableDice[index].Value);
+        public IEnumerable<Dice> DiceToDiscard(int value) => availableDice.Where(d => d.Value < value);
+        public IEnumerable<Dice> DiceToKeep(int value) => availableDice.Where(d => d.Value >= value);
 
         public void Empty()
         {
             allDice.Clear();
             availableDice.Clear();
             discardedDice.Clear();
+        }
+
+        public void Roll()
+        {
+            foreach (var dice in availableDice)
+            {
+                dice.Roll();
+            }
         }
     }
 }

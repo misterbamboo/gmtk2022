@@ -1,3 +1,4 @@
+using System;
 using DiceGame;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,6 +15,7 @@ public class UIDice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     private int index = 0;
     public bool inHand = false;
     public int Value { get; private set; }
+    private Dice dice;
 
     void Awake()
     {
@@ -24,6 +26,7 @@ public class UIDice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void Init(int index, Dice dice, UIHand hand)
     {
+        this.dice = dice;
         this.index = index;
         this.hand = hand;
         Value = dice.Value;
@@ -76,5 +79,11 @@ public class UIDice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         if (!inHand) return;
 
         rectTransform.anchoredPosition += eventData.delta / canvasRectTransform.localScale.x;
+    }
+
+    public void FakeRoll()
+    {
+        var side = (FaceSides)UnityEngine.Random.Range(1, 7);
+        this.icon.sprite = Sprites.Instance.Get(dice.GetFace(side).SpriteName);
     }
 }
