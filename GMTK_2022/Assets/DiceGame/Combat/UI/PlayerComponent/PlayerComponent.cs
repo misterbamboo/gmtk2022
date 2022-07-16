@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Assets.DiceGame.Combat.Entities.EnemyAggregate;
 
-public class PlayerComponent : MonoBehaviour
+public class PlayerComponent : LivingComponent
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public const string LayerMaskName = "Player";
 
-    // Update is called once per frame
-    void Update()
+    public Player Player { get; set; }
+
+    protected override void UpdateEnemyInfo()
     {
-        
+        if (Player != null)
+        {
+            life = Player.Life;
+            maxLife = Player.MaxLife;
+        }
     }
 }
