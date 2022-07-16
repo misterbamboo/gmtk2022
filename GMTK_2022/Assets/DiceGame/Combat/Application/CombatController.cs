@@ -21,11 +21,11 @@ namespace Assets.DiceGame.Combat.Application
 
         private readonly int minNumberOfEnnemies;
         private readonly int maxNumberOfEnemies;
-        private readonly IDictionary<EnemyType, IEnemyStats> enemyStatsPerType;
+        private readonly IDictionary<EnemyType, ICharacterStats> enemyStatsPerType;
 
         private Enemy focusedEnemy;
 
-        public CombatController(int minNumberOfEnnemies, int maxNumberOfEnemies, IDictionary<EnemyType, IEnemyStats> enemyStatsPerType, float playerDefaultLife)
+        public CombatController(int minNumberOfEnnemies, int maxNumberOfEnemies, IDictionary<EnemyType, ICharacterStats> enemyStatsPerType, float playerDefaultLife)
         {
             this.minNumberOfEnnemies = minNumberOfEnnemies;
             this.maxNumberOfEnemies = maxNumberOfEnemies;
@@ -54,9 +54,9 @@ namespace Assets.DiceGame.Combat.Application
             GameEvents.Raise(new NewCombatReadyEvent());
         }
 
-        private IEnemyStats GetEnemyStatsFromType(EnemyType enemyType)
+        private ICharacterStats GetEnemyStatsFromType(EnemyType enemyType)
         {
-            IEnemyStats stats;
+            ICharacterStats stats;
             if (!enemyStatsPerType.ContainsKey(enemyType) || (stats = enemyStatsPerType[enemyType]) == null)
             {
                 throw new EnemyStatsUndefinedException(enemyType);
