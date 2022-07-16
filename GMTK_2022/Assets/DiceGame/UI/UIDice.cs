@@ -70,7 +70,7 @@ public class UIDice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         if (inHand)
         {
             inHand = false;
-            hand.Select(index);
+            hand.TrySelecting(index);
         }
     }
 
