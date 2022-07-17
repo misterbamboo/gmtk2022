@@ -4,7 +4,7 @@ using UnityEngine;
 public class UpgradeManager : MonoBehaviour
 {
     public const string Tag = "UpgradeManager";
-
+    [SerializeField] private DiceBagComponent diceBagComponent;
     public GameStatsManager statsManager;
 
     public void ApplyUpgrade(Decision decision)
@@ -48,12 +48,12 @@ public class UpgradeManager : MonoBehaviour
 
     public void ApplyNewDiceUpgrade(NewDiceUpgrade upgrade)
     {
-        Debug.LogWarning("New dice upgrade not implemented yet");
+        diceBagComponent.AddDice(upgrade.Color);
     }
 
     public void ApplyRandomDiceUpgrade(RandomDiceUpgrade upgrade)
     {
-        Debug.LogWarning("Random dice upgrade not implemented yet");
+        diceBagComponent.AddDice(upgrade.Color);
     }
 
     public void ApplyCustomizationUpgrade(CustomizationUpgrade upgrade)

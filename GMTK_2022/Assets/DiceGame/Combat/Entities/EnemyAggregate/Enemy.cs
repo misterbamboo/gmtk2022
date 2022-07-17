@@ -26,7 +26,7 @@ namespace DiceGame.Combat.Entities.EnemyAggregate
             }
             else if (currentHealth < MaxLife / 4)
             {
-                TakeShieldSelfAction();
+                TakeShieldAction();
             }
             else
             {

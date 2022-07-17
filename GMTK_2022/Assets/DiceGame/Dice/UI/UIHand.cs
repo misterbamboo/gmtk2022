@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DiceGame.Combat.Entities;
 using DiceGame.SharedKernel;
 using DiceGame.Turn.Events;
 using DiceGame.UI;
 using DiceGame;
-using DiceGame.Combat.Entities.CharacterAggregate;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,6 +29,8 @@ public class UIHand : MonoBehaviour
     [SerializeField] private float rollTime = 1f;
     [SerializeField] private float rollPerSeconds = 10f;
     [SerializeField] private TargetSelector targetSelector;
+    [SerializeField] private DiceBagComponent dicebag;
+
     private Hand hand;
 
     private int currentPlayerIndex;
@@ -59,15 +59,7 @@ public class UIHand : MonoBehaviour
     private void ResetHand(int playerIndex)
     {
         diceUsed = 0;
-        hand.ResetDice(new List<Dice>()
-        {
-            Dice.WithValue(1),
-            Dice.WithValue(2),
-            Dice.WithValue(3),
-            Dice.WithValue(4),
-            Dice.WithValue(5),
-            Dice.WithValue(6)
-        });
+        hand.ResetDice(dicebag.Draw());
 
         State = HandState.WaitingForRoll;
         RedrawUI();

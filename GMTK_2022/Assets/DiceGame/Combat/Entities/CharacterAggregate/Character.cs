@@ -26,9 +26,11 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
         public int CurrentHealth => currentHealth;
         public float MaxLife => stats.MaxLife;
         public bool IsDead => currentHealth <= 0;
+        public ICharacterStats Stats => stats;
 
-        private void TakeDamage(int amount)
+        public void TakeDamage(int amount)
         {
+            OnReceiveDamagePipeline(amount);
             currentHealth = Mathf.Clamp(currentHealth - amount, 0, stats.MaxLife);
             GameEvents.Raise(new CharacterTookDamageEvent(id, amount));
 
@@ -38,19 +40,19 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
             }
         }
 
-        private void TakeHeal(int amount)
+        public void TakeHeal(int amount)
         {
             currentHealth = Mathf.Clamp(currentHealth + amount, 0, stats.MaxLife);
             GameEvents.Raise(new CharacterGotHealedEvent(id, amount));
         }
 
-        private void TakeShield(int amount)
+        public void TakeShield(int amount)
         {
             currentArmor += amount;
             GameEvents.Raise(new CharacterGotShieldedEvent(id, amount));
         }
 
-        private void TakeStatusEffects(IEnumerable<StatusEffect> statusEffects)
+        public void TakeStatusEffects(IEnumerable<StatusEffect> statusEffects)
         {
             foreach (var statusEffect in statusEffects)
             {
@@ -79,20 +81,22 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
             GameEvents.Raise<CombatActionSentEvent>(new CombatActionSentEvent(action));
         }
 
-        protected void TakeHealSelfAction(Heal heal = null)
+        protected void TakeHealAction(int targetId = -1, Heal heal = null)
         {
+            targetId = targetId == -1 ? id : targetId;
             heal = heal ?? new Heal(stats.Heal);
             heal = OnHealingPipeline(heal);
-            var action = new HealAction(heal, id, id);
+            var action = new HealAction(heal, id, targetId);
 
             GameEvents.Raise<CombatActionSentEvent>(new CombatActionSentEvent(action));
         }
 
-        protected void TakeShieldSelfAction(Shield shield = null)
+        protected void TakeShieldAction(int targetId = -1, Shield shield = null)
         {
+            targetId = targetId == -1 ? id : targetId;
             shield = shield ?? new Shield(stats.Defence);
             shield = OnShieldingPipeline(shield);
-            var action = new ShieldAction(shield, id, id);
+            var action = new ShieldAction(shield, id, targetId);
 
             GameEvents.Raise<CombatActionSentEvent>(new CombatActionSentEvent(action));
         }
@@ -158,6 +162,14 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
             }
 
             return shield;
+        }
+
+        protected void OnReceiveDamagePipeline(int amount)
+        {
+            foreach (var statusEffect in activeStatusEffects)
+            {
+                statusEffect.OnReceiveDamage(amount);
+            }
         }
 
         #endregion
