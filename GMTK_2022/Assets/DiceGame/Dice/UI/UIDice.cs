@@ -61,6 +61,7 @@ public class UIDice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
     }
 
     public void OnEndDrag(PointerEventData eventData)
