@@ -32,7 +32,7 @@ MonoBehaviour:
   - statKey: iron_attack
     value: 2
   - statKey: iron_armor
-    value: 1
+    value: 2
   - statKey: iron_health
     value: 25
   - statKey: iron_heal
@@ -40,17 +40,17 @@ MonoBehaviour:
   - statKey: domino_attack
     value: 5
   - statKey: domino_armor
-    value: 10
+    value: 3
   - statKey: domino_health
-    value: 50
+    value: 40
   - statKey: domino_heal
     value: 2
   - statKey: king_attack
     value: 10
   - statKey: king_armor
-    value: 10
+    value: 5
   - statKey: king_health
-    value: 75
+    value: 60
   - statKey: king_heal
     value: 2
   - statKey: battle_min_ennemies

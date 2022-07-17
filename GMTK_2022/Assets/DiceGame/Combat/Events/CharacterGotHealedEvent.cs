@@ -4,8 +4,8 @@ namespace DiceGame.Combat.Events
 {
     public class CharacterGotHealedEvent : IGameEvent
     {
-        private int Id { get; }
-        private int Amount { get; }
+        public int Id { get; }
+        public int Amount { get; }
 
         public CharacterGotHealedEvent(int id, int amount)
         {

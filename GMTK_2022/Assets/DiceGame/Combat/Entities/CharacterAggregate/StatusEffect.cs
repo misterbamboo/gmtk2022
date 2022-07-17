@@ -57,6 +57,15 @@ public abstract class StatusEffect
         return heal;
     }
 
-    public virtual void OnTurnStart() { }
-    public virtual void OnTurnEnd() { }
+    public virtual void OnReceiveDamage(int amount)
+    {
+    }
+
+    public virtual void OnTurnStart()
+    {
+    }
+
+    public virtual void OnTurnEnd()
+    {
+    }
 }

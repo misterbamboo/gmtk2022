@@ -48,8 +48,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4370ca21db307b45b15bd8cd1bc74fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLife: 10
-  life: 10
   healthBar: {fileID: 3600584835264509403}
   imageTransform: {fileID: 1404953755702159629}
 --- !u!61 &5776074926942704711
@@ -369,6 +367,10 @@ PrefabInstance:
       propertyPath: isEnemy
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3923381678228387046, guid: 8924245244561e44b936fe343a5dc633, type: 3}
+      propertyPath: characterComponent
+      value: 
+      objectReference: {fileID: 541977926615734459}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8924245244561e44b936fe343a5dc633, type: 3}
 --- !u!224 &704043249070083946 stripped

@@ -9,6 +9,11 @@ namespace DiceGame
         private List<Dice> dices = new List<Dice>();
         private int currentDiceIndex = 0;
 
+        public DiceBag(IEnumerable<Dice> dices)
+        {
+            this.dices = dices.ToList();
+        }
+
         public IEnumerable<Dice> Draw(int count)
         {
             if (dices.Count < count)
@@ -21,10 +26,15 @@ namespace DiceGame
                 ResetBag();
             }
 
-            var result = dices.Skip(currentDiceIndex - count).Take(count);
+            var result = dices.Skip(currentDiceIndex).Take(count);
             currentDiceIndex += count;
 
             return result;
+        }
+
+        public void AddDice(Dice dice)
+        {
+            dices.Add(dice);
         }
 
         private void ResetBag()

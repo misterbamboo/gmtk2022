@@ -13,9 +13,14 @@ namespace DiceGame.Combat.Entities
         {
         }
 
-        public void Attack(int targetId)
+        public void Attack(int targetId, Attack attack = null)
         {
-            TakeAttackAction(targetId);
+            TakeAttackAction(targetId, attack);
+        }
+
+        public void Shield(int targetId, Shield shield = null)
+        {
+            TakeShieldAction(targetId, shield);
         }
     }
 }

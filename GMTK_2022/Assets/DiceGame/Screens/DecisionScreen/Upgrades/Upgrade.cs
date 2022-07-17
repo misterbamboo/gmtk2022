@@ -11,12 +11,13 @@ namespace DiceGame
 
         public static Upgrade GeneratePlayer()
         {
-            return UnityEngine.Random.Range(1, 5) switch
+            //TODO Bring back customization when implements :(
+            return UnityEngine.Random.Range(1, 4) switch
             {
                 1 => StatBuffUpgrade.Player(),
                 2 => NewDiceUpgrade.Random(),
                 3 => RandomDiceUpgrade.Random(),
-                4 => new CustomizationUpgrade(),
+                // 4 => new CustomizationUpgrade(),
                 _ => throw new System.Exception("Invalid upgrade type")
             };
         }

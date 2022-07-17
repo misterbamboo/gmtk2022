@@ -10,7 +10,19 @@ public abstract class CharacterComponent : MonoBehaviour
     [SerializeField] protected Transform imageTransform;
 
     public int CharacterId => Character?.Id ?? -1;
-    public Character Character { get; set; }
+    private Character character;
+    public Character Character
+    {
+        get
+        {
+            return character;
+        }
+        set
+        {
+            character = value;
+            healthBar.RedrawImage();
+        }
+    }
     protected bool CombatActionCancellationRequested { get; set; }
 
     public void Shake()
@@ -42,17 +54,12 @@ public abstract class CharacterComponent : MonoBehaviour
 
     public void UpdateUIs()
     {
-        RedrawHealthBar(Character.CurrentHealth / Character.MaxLife);
-    }
-
-    private void RedrawHealthBar(float percentRatio)
-    {
-        healthBar.SetPercentageRatio(percentRatio);
+        healthBar.RedrawImage();
     }
 
     private void OnDrawGizmos()
     {
-        RedrawHealthBar(Character.CurrentHealth / Character.MaxLife);
+        UpdateUIs();
     }
 
     public void RequestCombatActionCancellation()

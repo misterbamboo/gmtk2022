@@ -56,8 +56,8 @@ public class CombatManager : MonoBehaviour
 
         // TODO: Implement animations
         GameEvents.Subscribe<CharacterTookDamageEvent>(TakeDamageAnimation);
-        GameEvents.Subscribe<CharacterGotHealedEvent>(EventsReceiver);
-        GameEvents.Subscribe<CharacterGotShieldedEvent>(EventsReceiver);
+        GameEvents.Subscribe<CharacterGotHealedEvent>(TakeHealAnimation);
+        GameEvents.Subscribe<CharacterGotShieldedEvent>(TakeShieldAnimation);
     }
 
     private void OnNewGameRequested(NewGameRequestedEvent obj)
@@ -157,6 +157,18 @@ public class CombatManager : MonoBehaviour
         var character = FindCharacterComponent(combatEvent.Id);
         character.UpdateUIs();
         character.Shake();
+    }
+
+    private void TakeShieldAnimation(CharacterGotShieldedEvent combatEvent)
+    {
+        var character = FindCharacterComponent(combatEvent.Id);
+        character.UpdateUIs();
+    }
+
+    private void TakeHealAnimation(CharacterGotHealedEvent combatEvent)
+    {
+        var character = FindCharacterComponent(combatEvent.Id);
+        character.UpdateUIs();
     }
 
     private void OnCharacterKilled(CharacterKilledEvent characterKilled)
