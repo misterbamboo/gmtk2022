@@ -12,6 +12,7 @@ using System.Linq;
 using UnityEngine;
 using System.Collections;
 using DiceGame.Assets.DiceGame.DecisionScreen.Events;
+using DiceGame.Assets.DiceGame.Screens.MainMenuScreen.Events;
 
 [RequireComponent(typeof(CombatAnimatorComponent))]
 public class CombatManager : MonoBehaviour
@@ -28,8 +29,6 @@ public class CombatManager : MonoBehaviour
     [SerializeField] PlayerPrefabDefinition playerPrefab;
 
     [Header("Enemies")]
-    [SerializeField] int minNumberOfEnemies = 1;
-    [SerializeField] int maxNumberOfEnemies = 4;
     [SerializeField] List<EnemyPrefabDefinition> enemyPrefabs;
 
     List<EnemyComponent> enemiesComponents = new List<EnemyComponent>();
@@ -43,11 +42,11 @@ public class CombatManager : MonoBehaviour
     {
         combatAnimator = GetComponent<CombatAnimatorComponent>();
         SubscribeEvents();
-        StartNewCombat();
     }
 
     private void SubscribeEvents()
     {
+        GameEvents.Subscribe<NewGameRequestedEvent>(OnNewGameRequested);
         GameEvents.Subscribe<DecisionCompletedEvent>(OnDecisionCompleted);
 
         GameEvents.Subscribe<TurnStartedEvent>(OnTurnStarted);
@@ -61,6 +60,11 @@ public class CombatManager : MonoBehaviour
         GameEvents.Subscribe<CharacterGotShieldedEvent>(EventsReceiver);
     }
 
+    private void OnNewGameRequested(NewGameRequestedEvent obj)
+    {
+        StartNewCombat();
+    }
+
     private void OnDecisionCompleted(DecisionCompletedEvent decisionCompletedEvent)
     {
         StartNewCombat();
@@ -70,6 +74,9 @@ public class CombatManager : MonoBehaviour
     {
         var enemyStatsPerType = statsManager.GetEnemyStats();
         var playerStats = statsManager.GetPlayerStats();
+
+        var minNumberOfEnemies = statsManager.GetMinEnemies();
+        var maxNumberOfEnemies = statsManager.GetMaxEnemies();
 
         combatController = new CombatController(minNumberOfEnemies, maxNumberOfEnemies, enemyStatsPerType, playerStats);
         combatController.StartCombat();

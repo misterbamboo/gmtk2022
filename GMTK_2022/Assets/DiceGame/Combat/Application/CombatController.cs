@@ -90,7 +90,7 @@ namespace DiceGame.Combat.Application
 
         public void CheckWinningCondition()
         {
-            if (Enemies.All(e=>e.IsDead) || !Enemies.Any())
+            if (Enemies.All(e => e.IsDead) || !Enemies.Any())
             {
                 CombatFinished = true;
                 GameEvents.Raise(new CombatEndedEvent(playerWon: true));
