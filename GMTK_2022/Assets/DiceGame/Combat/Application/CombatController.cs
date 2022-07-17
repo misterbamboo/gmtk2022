@@ -2,7 +2,6 @@ using DiceGame.Combat.Entities.EnemyAggregate;
 using DiceGame.Combat.Entities;
 using DiceGame.Combat.Events;
 using DiceGame.SharedKernel;
-using DiceGame.Turn.Events;
 using System;
 using System.Collections.Generic;
 using DiceGame.Combat.Application.Exceptions;
@@ -16,6 +15,7 @@ namespace DiceGame.Combat.Application
     {
         public Player Player { get; private set; }
         public List<Enemy> Enemies { get; private set; }
+        public bool CombatFinished { get; private set; }
 
         private readonly int minNumberOfEnnemies;
         private readonly int maxNumberOfEnemies;
@@ -33,7 +33,7 @@ namespace DiceGame.Combat.Application
         public void StartCombat()
         {
             GenerateEnemies(minNumberOfEnnemies, maxNumberOfEnemies);
-            GameEvents.Raise(new NewCombatReadyEvent());
+            GameEvents.Raise(new CombatStartedEvent());
         }
 
         private void GenerateEnemies(int minNumberOfEnnemies, int maxNumberOfEnemies)
@@ -86,6 +86,20 @@ namespace DiceGame.Combat.Application
         {
             var enemy = Enemies.FirstOrDefault(e => e.Id == id);
             enemy.TakeDecision(Player, Enemies);
+        }
+
+        public void CheckWinningCondition()
+        {
+            if (Enemies.All(e=>e.IsDead) || !Enemies.Any())
+            {
+                CombatFinished = true;
+                GameEvents.Raise(new CombatEndedEvent(playerWon: true));
+            }
+            else if (Player.IsDead)
+            {
+                CombatFinished = true;
+                GameEvents.Raise(new CombatEndedEvent(playerWon: false));
+            }
         }
     }
 }

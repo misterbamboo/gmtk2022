@@ -46,8 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e48f12afd3b918f418a45b21d5fd814d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLife: 100
-  life: 0
   healthBar: {fileID: 6684471618078274393}
   imageTransform: {fileID: 7689515229444427235}
 --- !u!1 &7689515229444427244
@@ -235,10 +233,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1026888435008471018, guid: 8924245244561e44b936fe343a5dc633, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3923381678228387046, guid: 8924245244561e44b936fe343a5dc633, type: 3}
-      propertyPath: percentageRatio
+      propertyPath: isEnemy
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System.Collections;
+using DiceGame.Assets.DiceGame.DecisionScreen.Events;
 
 [RequireComponent(typeof(CombatAnimatorComponent))]
 public class CombatManager : MonoBehaviour
@@ -41,26 +42,38 @@ public class CombatManager : MonoBehaviour
     void Start()
     {
         combatAnimator = GetComponent<CombatAnimatorComponent>();
-
-        var enemyStatsPerType = statsManager.GetEnemyStats();
-        var playerStats = statsManager.GetPlayerStats();
         SubscribeEvents();
-        combatController = new CombatController(minNumberOfEnemies, maxNumberOfEnemies, enemyStatsPerType, playerStats);
-        combatController.StartCombat();
+        StartNewCombat();
     }
 
     private void SubscribeEvents()
     {
-        GameEvents.Subscribe<NewCombatReadyEvent>(EventsReceiver);
+        GameEvents.Subscribe<DecisionCompletedEvent>(OnDecisionCompleted);
+
         GameEvents.Subscribe<EnemyTakeDamageEvent>(EventsReceiver);
-        GameEvents.Subscribe<CharacterKilledEvent>(OnCharacterKilled);
         GameEvents.Subscribe<TurnStartedEvent>(OnTurnStarted);
+        GameEvents.Subscribe<CombatStartedEvent>(EventsReceiver);
         GameEvents.Subscribe<CombatActionSentEvent>(OnEnemyDecisionTaken);
+        GameEvents.Subscribe<CharacterKilledEvent>(OnCharacterKilled);
 
         // TODO: Implement animations
         GameEvents.Subscribe<CharacterTookDamageEvent>(TakeDamageAnimation);
         GameEvents.Subscribe<CharacterGotHealedEvent>(EventsReceiver);
         GameEvents.Subscribe<CharacterGotShieldedEvent>(EventsReceiver);
+    }
+
+    private void OnDecisionCompleted(DecisionCompletedEvent decisionCompletedEvent)
+    {
+        StartNewCombat();
+    }
+
+    private void StartNewCombat()
+    {
+        var enemyStatsPerType = statsManager.GetEnemyStats();
+        var playerStats = statsManager.GetPlayerStats();
+
+        combatController = new CombatController(minNumberOfEnemies, maxNumberOfEnemies, enemyStatsPerType, playerStats);
+        combatController.StartCombat();
     }
 
     private void OnEnemyDecisionTaken(CombatActionSentEvent combatEvent)
@@ -109,7 +122,18 @@ public class CombatManager : MonoBehaviour
 
     private Transform FindCharacterTransform(int characterId)
     {
-        return FindCharacterComponent(characterId)?.transform;
+        var component = FindCharacterComponent(characterId);
+
+        // Important to keep it like this. The component can have been Destroy()
+        // But the reference is still not null. Unity override the == null and != null opperator
+        // event if the C# reference exist, the result of this will be true if Destroy has been called on the GameObject
+        // A simple, `component?.transform` isn't enought,
+        // because the C# object is not null and don't call the == null operator or != null operator
+        if (component != null)
+        {
+            return component.transform;
+        }
+        return null;
     }
 
     private CharacterComponent FindCharacterComponent(int id)
@@ -119,7 +143,7 @@ public class CombatManager : MonoBehaviour
 
     private void EventsReceiver(IGameEvent gameEvent)
     {
-        if (gameEvent is NewCombatReadyEvent) InitGameObjects();
+        if (gameEvent is CombatStartedEvent) InitGameObjects();
     }
 
     private void TakeDamageAnimation(CharacterTookDamageEvent combatEvent)
@@ -132,6 +156,7 @@ public class CombatManager : MonoBehaviour
     private void OnCharacterKilled(CharacterKilledEvent characterKilled)
     {
         DestroyCharacterComponent(characterKilled.Id);
+        combatController.CheckWinningCondition();
     }
 
     private void DestroyCharacterComponent(int id)

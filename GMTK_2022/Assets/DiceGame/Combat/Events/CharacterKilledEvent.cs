@@ -13,7 +13,7 @@ namespace DiceGame.Combat.Events
 
         public override string ToString()
         {
-            return $"{GetType().Name}: EnemyId={Id}";
+            return $"{GetType().Name}: Id={Id}";
         }
     }
 }

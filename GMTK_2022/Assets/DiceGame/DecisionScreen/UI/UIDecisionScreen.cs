@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using DiceGame;
+using DiceGame.Assets.DiceGame.DecisionScreen.Events;
+using DiceGame.SharedKernel;
 using UnityEngine;
 
 public class UIDecisionScreen : MonoBehaviour
@@ -37,6 +39,7 @@ public class UIDecisionScreen : MonoBehaviour
     public void Continue()
     {
         ApplyUpgrade(selectedIndex);
+        GameEvents.Raise(new DecisionCompletedEvent());
         Destroy(this.gameObject);
     }
 

@@ -7,7 +7,6 @@ namespace DiceGame.Turn.Application
 {
     public class TurnController
     {
-        public bool IsFistTurnStarted { get; private set; }
         private int currentPlayerIndex;
         private int numberOfPlayers;
 
@@ -19,7 +18,6 @@ namespace DiceGame.Turn.Application
 
         public void StartFistTurn()
         {
-            IsFistTurnStarted = true;
             GameEvents.Raise(new TurnStartedEvent(currentPlayerIndex));
         }
 

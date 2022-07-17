@@ -2,7 +2,7 @@
 
 namespace DiceGame.Combat.Events
 {
-    public class NewCombatReadyEvent : IGameEvent
+    public class CombatStartedEvent : IGameEvent
     {
         public override string ToString()
         {
