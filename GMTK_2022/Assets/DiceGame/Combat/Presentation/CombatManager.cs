@@ -67,10 +67,27 @@ public class CombatManager : MonoBehaviour
     {
         var sourceTransform = FindCharacterTransform(combatEvent.CombatAction.SourceId);
         var targetTransform = FindCharacterTransform(combatEvent.CombatAction.TargetIds.First());
-        combatAnimator.QueueAnimationForEnemyDecision(combatEvent.CombatAction, sourceTransform, targetTransform, () =>
+
+        // When we add the logic of hitting X times, we raise X attack event event if the
+        // Target could die after 1 attack. So if the transorm is null, if probably because
+        // the CharacterComponent was deleted before the Coroutine is done
+        if (IsSourceOrTargetIsAlife(sourceTransform, targetTransform))
         {
-            combatController.DispatchCombatAction(combatEvent.CombatAction);
-        });
+            combatAnimator.QueueAnimationForEnemyDecision(combatEvent.CombatAction, sourceTransform, targetTransform, () =>
+            {
+                combatController.DispatchCombatAction(combatEvent.CombatAction);
+            });
+        }
+        else
+        {
+            var character = FindCharacterComponent(combatEvent.CombatAction.SourceId);
+            character.RequestCombatActionCancellation();
+        }
+    }
+
+    private static bool IsSourceOrTargetIsAlife(Transform sourceTransform, Transform targetTransform)
+    {
+        return sourceTransform != null && targetTransform != null;
     }
 
     private void OnTurnStarted(TurnStartedEvent e)
@@ -90,25 +107,14 @@ public class CombatManager : MonoBehaviour
         GameEvents.Raise<TurnEndedEvent>(new TurnEndedEvent(1));
     }
 
-    private CharacterComponent FindCharacterComponent(int id)
-    {
-        return id == Player.PlayerId ? playerComponent : enemiesComponents.First(ec => ec.CharacterId == id);
-    }
-
     private Transform FindCharacterTransform(int characterId)
     {
-        if (playerComponent.CharacterId == characterId)
-        {
-            return playerComponent.transform;
-        }
+        return FindCharacterComponent(characterId)?.transform;
+    }
 
-        var souceEnemy = enemiesComponents.FirstOrDefault(c => c.CharacterId == characterId);
-        if (souceEnemy != null)
-        {
-            return souceEnemy.transform;
-        }
-
-        throw new CharacterTransformNotFound(characterId);
+    private CharacterComponent FindCharacterComponent(int id)
+    {
+        return id == Player.PlayerId ? playerComponent : enemiesComponents.FirstOrDefault(ec => ec.CharacterId == id);
     }
 
     private void EventsReceiver(IGameEvent gameEvent)

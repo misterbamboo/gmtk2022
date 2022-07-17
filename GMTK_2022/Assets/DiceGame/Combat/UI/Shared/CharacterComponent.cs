@@ -11,6 +11,7 @@ public abstract class CharacterComponent : MonoBehaviour
 
     public int CharacterId => Character?.Id ?? -1;
     public Character Character { get; set; }
+    protected bool CombatActionCancellationRequested { get; set; }
 
     public void Shake()
     {
@@ -52,5 +53,10 @@ public abstract class CharacterComponent : MonoBehaviour
     private void OnDrawGizmos()
     {
         RedrawHealthBar(Character.CurrentHealth / Character.MaxLife);
+    }
+
+    public void RequestCombatActionCancellation()
+    {
+        CombatActionCancellationRequested = true;
     }
 }

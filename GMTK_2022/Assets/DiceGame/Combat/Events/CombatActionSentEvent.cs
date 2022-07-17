@@ -15,7 +15,7 @@ namespace DiceGame.Combat.Events
         public override string ToString()
         {
             var targets = string.Join(',', CombatAction.TargetIds);
-            return $"{GetType().Name}: CombatAction={CombatAction.GetType()}, SourceId={CombatAction.SourceId}, TargetIds={targets}";
+            return $"{GetType().Name}: CombatAction={CombatAction.GetType().Name}, SourceId={CombatAction.SourceId}, TargetIds={targets}";
         }
     }
 }

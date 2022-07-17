@@ -22,8 +22,12 @@ public class PlayerComponent : CharacterComponent
     {
         for (int i = 0; i < value; i++)
         {
-            ((Player)Character).Attack(targetId);
-            yield return new WaitForSeconds(0.5f);
+            if (!CombatActionCancellationRequested)
+            {
+                ((Player)Character).Attack(targetId);
+                yield return new WaitForSeconds(0.5f);
+            }
         }
+        CombatActionCancellationRequested = false;
     }
 }
