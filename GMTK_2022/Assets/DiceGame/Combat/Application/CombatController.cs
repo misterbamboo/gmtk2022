@@ -6,7 +6,6 @@ using DiceGame.Turn.Events;
 using System;
 using System.Collections.Generic;
 using DiceGame.Combat.Application.Exceptions;
-using DiceGame.Combat.Entities.CombatActionAggregate;
 using System.Linq;
 using DiceGame.Combat.Entities.Exceptions;
 using DiceGame.Combat.Entities.CharacterAggregate;
@@ -16,10 +15,7 @@ namespace DiceGame.Combat.Application
     public class CombatController
     {
         public Player Player { get; private set; }
-
         public List<Enemy> Enemies { get; private set; }
-
-        private EnemyPlayerAI enemyPlayerAI;
 
         private readonly int minNumberOfEnnemies;
         private readonly int maxNumberOfEnemies;
@@ -32,7 +28,6 @@ namespace DiceGame.Combat.Application
             this.enemyStatsPerType = enemyStatsPerType;
             Enemies = new List<Enemy>(maxNumberOfEnemies);
             Player = new Player(playerStats);
-            enemyPlayerAI = new EnemyPlayerAI(Player, Enemies);
         }
 
         public void StartCombat()
@@ -87,12 +82,10 @@ namespace DiceGame.Combat.Application
             throw new CharacterNotFoundException(id);
         }
 
-        public void OnTurnStarted(TurnStartedEvent e)
+        public void EnemyTakeTurn(int id)
         {
-            if (e.IsEnemyPlayerTurn())
-            {
-                enemyPlayerAI.EnemiesTakeDecisions();
-            }
+            var enemy = Enemies.FirstOrDefault(e => e.Id == id);
+            enemy.TakeDecision(Player, Enemies);
         }
     }
 }

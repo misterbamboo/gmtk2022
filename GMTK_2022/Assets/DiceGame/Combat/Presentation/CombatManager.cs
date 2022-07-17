@@ -7,18 +7,15 @@ using DiceGame.Combat.Presentation.Exceptions;
 using DiceGame.Combat.Presentation.Inspector;
 using DiceGame.SharedKernel;
 using DiceGame.Turn.Events;
-using DiceGame.Combat.Entities.CharacterAggregate;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(CombatAnimatorComponent))]
 public class CombatManager : MonoBehaviour
 {
     public const string Tag = "CombatManager";
-
-    
 
     [Header("Stats")]
     [SerializeField] GameStatsManager statsManager;
@@ -55,15 +52,13 @@ public class CombatManager : MonoBehaviour
     private void SubscribeEvents()
     {
         GameEvents.Subscribe<NewCombatReadyEvent>(EventsReceiver);
-        GameEvents.Subscribe<EnemySelectedEvent>(EventsReceiver);
-        GameEvents.Subscribe<EnemyUnselectedEvent>(EventsReceiver);
         GameEvents.Subscribe<EnemyTakeDamageEvent>(EventsReceiver);
         GameEvents.Subscribe<CharacterKilledEvent>(OnCharacterKilled);
-        GameEvents.Subscribe<TurnStartedEvent>((e) => combatController.OnTurnStarted(e));
+        GameEvents.Subscribe<TurnStartedEvent>(OnTurnStarted);
         GameEvents.Subscribe<CombatActionSentEvent>(OnEnemyDecisionTaken);
 
         // TODO: Implement animations
-        GameEvents.Subscribe<CharacterTookDamageEvent>(EventsReceiver);
+        GameEvents.Subscribe<CharacterTookDamageEvent>(TakeDamageAnimation);
         GameEvents.Subscribe<CharacterGotHealedEvent>(EventsReceiver);
         GameEvents.Subscribe<CharacterGotShieldedEvent>(EventsReceiver);
     }
@@ -76,6 +71,28 @@ public class CombatManager : MonoBehaviour
         {
             combatController.DispatchCombatAction(combatEvent.CombatAction);
         });
+    }
+
+    private void OnTurnStarted(TurnStartedEvent e)
+    {
+        if (!e.IsEnemyTurn) return;
+        StartCoroutine(EnemyTurnCoroutine());
+    }
+
+    private IEnumerator EnemyTurnCoroutine()
+    {
+        foreach (var enemy in enemiesComponents)
+        {
+            combatController.EnemyTakeTurn(enemy.CharacterId);
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        GameEvents.Raise<TurnEndedEvent>(new TurnEndedEvent(1));
+    }
+
+    private CharacterComponent FindCharacterComponent(int id)
+    {
+        return id == Player.PlayerId ? playerComponent : enemiesComponents.First(ec => ec.CharacterId == id);
     }
 
     private Transform FindCharacterTransform(int characterId)
@@ -97,9 +114,13 @@ public class CombatManager : MonoBehaviour
     private void EventsReceiver(IGameEvent gameEvent)
     {
         if (gameEvent is NewCombatReadyEvent) InitGameObjects();
-        if (gameEvent is EnemySelectedEvent) { }
-        if (gameEvent is EnemyUnselectedEvent) { }
-        if (gameEvent is EnemyTakeDamageEvent) ShakeRelatedEnemyComponent((EnemyTakeDamageEvent)gameEvent);
+    }
+
+    private void TakeDamageAnimation(CharacterTookDamageEvent combatEvent)
+    {
+        var character = FindCharacterComponent(combatEvent.Id);
+        character.UpdateUIs();
+        character.Shake();
     }
 
     private void OnCharacterKilled(CharacterKilledEvent characterKilled)
@@ -118,15 +139,6 @@ public class CombatManager : MonoBehaviour
         var enemyComponent = enemiesComponents.First(c => c.CharacterId == id);
         enemiesComponents.Remove(enemyComponent);
         Destroy(enemyComponent.gameObject);
-    }
-
-    private void ShakeRelatedEnemyComponent(EnemyTakeDamageEvent enemyTakeDamageEvent)
-    {
-        var enemyComponent = enemiesComponents.FirstOrDefault(c => c.CharacterId == enemyTakeDamageEvent.Id);
-        if (enemyComponent != null)
-        {
-            enemyComponent.Shake();
-        }
     }
 
     private void InitGameObjects()

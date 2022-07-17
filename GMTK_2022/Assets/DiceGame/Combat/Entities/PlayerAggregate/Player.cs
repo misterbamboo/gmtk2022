@@ -13,12 +13,9 @@ namespace DiceGame.Combat.Entities
         {
         }
 
-        public void TakeAction(Dice diceSelected, int targetId)
+        public void Attack(int targetId)
         {
-            for (int i = 0; i < diceSelected.Value; i++)
-            {
-                TakeAttackAction(targetId);
-            }
+            TakeAttackAction(targetId);
         }
     }
 }

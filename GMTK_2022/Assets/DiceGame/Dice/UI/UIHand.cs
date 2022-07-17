@@ -49,15 +49,15 @@ public class UIHand : MonoBehaviour
 
     private void OnTurnStarted(TurnStartedEvent turnStartedEvent)
     {
-        if (turnStartedEvent.IsHumanPlayer())
+        if (turnStartedEvent.IsHumanTurn)
         {
+            this.currentPlayerIndex = turnStartedEvent.PlayerIndex;
             ResetHand(turnStartedEvent.PlayerIndex);
         }
     }
 
     private void ResetHand(int playerIndex)
     {
-        this.currentPlayerIndex = playerIndex;
         diceUsed = 0;
         hand.ResetDice(new List<Dice>()
         {

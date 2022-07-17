@@ -2,23 +2,15 @@ using DiceGame.Utils;
 using DiceGame.Combat.Entities.CharacterAggregate;
 using System.Collections;
 using UnityEngine;
+using System;
 
 public abstract class CharacterComponent : MonoBehaviour
 {
-    [SerializeField] protected float maxLife = 100;
-    [SerializeField] protected float life;
     [SerializeField] protected HealthBarComponent healthBar;
     [SerializeField] protected Transform imageTransform;
 
     public int CharacterId => Character?.Id ?? -1;
     public Character Character { get; set; }
-
-    private TrackValueChange<float, float> lifeRatioChanges = new TrackValueChange<float, float>();
-
-    void Start()
-    {
-        life = maxLife;
-    }
 
     public void Shake()
     {
@@ -47,39 +39,18 @@ public abstract class CharacterComponent : MonoBehaviour
         imageTransform.rotation = q;
     }
 
-    private void OnDrawGizmos()
+    public void UpdateUIs()
     {
-        UpdateLifeRatio();
-    }
-
-
-    void Update()
-    {
-        UpdateEnemyInfo();
-        UpdateLifeRatio();
-    }
-
-    protected void UpdateEnemyInfo()
-    {
-        if (Character != null)
-        {
-            life = Character.CurrentHealth;
-            maxLife = Character.MaxLife;
-        }
-    }
-
-    private void UpdateLifeRatio()
-    {
-        lifeRatioChanges.Reset(life, maxLife);
-        if (lifeRatioChanges.HasChanged)
-        {
-            var ratio = life / maxLife;
-            RedrawHealthBar(ratio);
-        }
+        RedrawHealthBar(Character.CurrentHealth / Character.MaxLife);
     }
 
     private void RedrawHealthBar(float percentRatio)
     {
         healthBar.SetPercentageRatio(percentRatio);
+    }
+
+    private void OnDrawGizmos()
+    {
+        RedrawHealthBar(Character.CurrentHealth / Character.MaxLife);
     }
 }

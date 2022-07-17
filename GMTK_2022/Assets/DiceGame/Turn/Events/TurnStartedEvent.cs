@@ -6,23 +6,14 @@ namespace DiceGame.Turn.Events
     public class TurnStartedEvent : IGameEvent
     {
         public int PlayerIndex { get; }
-        public int NumberOfPlayers { get; }
 
-        public TurnStartedEvent(int playerTurnIndex, int numberOfPlayers)
+        public TurnStartedEvent(int playerTurnIndex)
         {
             PlayerIndex = playerTurnIndex;
-            NumberOfPlayers = numberOfPlayers;
         }
 
-        public bool IsEnemyPlayerTurn()
-        {
-            return PlayerIndex != 0;
-        }
-
-        public bool IsHumanPlayer()
-        {
-            return PlayerIndex == 0;
-        }
+        public bool IsEnemyTurn => PlayerIndex != 0;
+        public bool IsHumanTurn => PlayerIndex == 0;
 
         public override string ToString()
         {

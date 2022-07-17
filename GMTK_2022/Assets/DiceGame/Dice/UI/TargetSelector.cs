@@ -1,6 +1,4 @@
-﻿using DiceGame.Combat.Events;
-using DiceGame.SharedKernel;
-using DiceGame.Combat.Entities.CharacterAggregate;
+﻿using DiceGame.Combat.Entities.CharacterAggregate;
 using System;
 using UnityEngine;
 
@@ -52,11 +50,9 @@ namespace DiceGame.UI
                     return;
                 }
 
-                GameEvents.Raise(new EnemyUnselectedEvent(focusedEnemy.Id));
             }
 
             focusedEnemy = character;
-            GameEvents.Raise(new EnemySelectedEvent(focusedEnemy.Id));
         }
 
         public void OnUnfocusEnemy()
@@ -65,7 +61,6 @@ namespace DiceGame.UI
             {
                 var id = focusedEnemy.Id;
                 focusedEnemy = null;
-                GameEvents.Raise(new EnemyUnselectedEvent(id));
             }
         }
     }
