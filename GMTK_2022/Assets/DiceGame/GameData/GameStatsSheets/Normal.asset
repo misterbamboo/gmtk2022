@@ -46,14 +46,14 @@ MonoBehaviour:
   - statKey: domino_heal
     value: 2
   - statKey: king_attack
-    value: 20
+    value: 10
   - statKey: king_armor
-    value: 40
+    value: 10
   - statKey: king_health
-    value: 100
+    value: 75
   - statKey: king_heal
     value: 2
   - statKey: battle_min_ennemies
     value: 1
   - statKey: battle_max_ennemies
-    value: 4
+    value: 2
