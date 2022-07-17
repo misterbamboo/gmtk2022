@@ -10,6 +10,7 @@ public abstract class StatusEffect
     protected Character target;
 
     public int duration { get; protected set; }
+    public bool IsExpired => duration <= 0;
 
     public StatusEffect(Character source, int duration)
     {

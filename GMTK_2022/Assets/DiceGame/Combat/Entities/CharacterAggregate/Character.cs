@@ -99,6 +99,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
         #endregion
 
         #region PipeLines
+
         protected Attack OnAttackingPipeline(Attack attack)
         {
             foreach (var statusEffect in activeStatusEffects)
@@ -184,6 +185,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
         protected virtual void ReceiveAttack(Attack attack)
         {
             attack = OnReceiveAttackPipeline(attack);
+            RemoveExpiredStatusEffects();
             TakeStatusEffects(attack.StatusEffects);
             TakeDamage(attack.Amount);
         }
@@ -191,13 +193,23 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
         protected virtual void ReceiveHealAction(Heal heal)
         {
             heal = OnReceiveHealingPipeline(heal);
+            RemoveExpiredStatusEffects();
             TakeHeal(heal.Amount);
         }
 
         protected virtual void ReceiveShieldAction(Shield shield)
         {
             shield = OnReceiveShieldPipeline(shield);
+            RemoveExpiredStatusEffects();
             TakeShield(shield.Amount);
+        }
+
+        protected void RemoveExpiredStatusEffects()
+        {
+            foreach (var item in activeStatusEffects.Where(se => se.IsExpired))
+            {
+                GameEvents.Raise<StatusEffectExpiredEvent>(new StatusEffectExpiredEvent(id, item.GetType()));
+            }
         }
 
         #endregion
