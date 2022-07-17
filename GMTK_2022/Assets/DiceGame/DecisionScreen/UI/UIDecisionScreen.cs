@@ -5,8 +5,14 @@ using UnityEngine;
 public class UIDecisionScreen : MonoBehaviour
 {
     [SerializeField] private List<UIDecision> uiDecisions;
+    private UpgradeManager upgradeManager;
     private List<Decision> decisions = new List<Decision>();
     private int selectedIndex = -1;
+
+    private void Awake()
+    {
+        upgradeManager = GameObject.FindWithTag(UpgradeManager.Tag).GetComponent<UpgradeManager>();
+    }
 
     private void Start()
     {
@@ -36,6 +42,7 @@ public class UIDecisionScreen : MonoBehaviour
 
     public void ApplyUpgrade(int index)
     {
+        upgradeManager.ApplyUpgrade(decisions[index]);
     }
 
     public List<Decision> GenerateDecisions()

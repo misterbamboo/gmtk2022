@@ -9,19 +9,5 @@ namespace Assets.DiceGame.Combat.Presentation.Inspector
     {
         public EnemyType type;
         public EnemyComponent component;
-        public EnemyStatsDefinition stats;
-    }
-
-    [Serializable]
-    public class EnemyStatsDefinition : ICharacterStats
-    {
-        [SerializeField] float attackPower;
-        public float Attack => attackPower;
-
-        [SerializeField] float defencePower;
-        public float Defence => defencePower;
-
-        [SerializeField] float maxLife;
-        public float MaxLife => maxLife;
     }
 }

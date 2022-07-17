@@ -1,4 +1,5 @@
 using System.Linq;
+using DiceGame.GameData;
 using UnityEngine;
 
 namespace DiceGame
@@ -36,7 +37,7 @@ namespace DiceGame
         public override string IconName => StatKey switch
         {
             string a when a.Contains("attack") => "attack",
-            string b when b.Contains("shield") => "shield",
+            string b when b.Contains("armor") => "armor",
             string c when c.Contains("health") => "health",
             _ => "updade"
         };

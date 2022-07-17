@@ -7,12 +7,19 @@
         float MaxLife { get; }
     }
 
-    public class CharacterStats : ICharacterStats
+    public struct CharacterStats : ICharacterStats
     {
-        public float Attack { get; set; }
+        public CharacterStats(float attack, float defence, float maxLife)
+        {
+            Attack = attack;
+            Defence = defence;
+            MaxLife = maxLife;
+        }
 
-        public float Defence { get; set; }
+        public float Attack { get; }
 
-        public float MaxLife { get; set; }
+        public float Defence { get; }
+
+        public float MaxLife { get; }
     }
 }
