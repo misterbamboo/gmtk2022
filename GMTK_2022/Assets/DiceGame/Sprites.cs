@@ -22,6 +22,7 @@ namespace DiceGame
 
         public Sprite Get(string name)
         {
+            name = name.ToLower();
             if (spriteDict.ContainsKey(name))
             {
                 return spriteDict[name];
