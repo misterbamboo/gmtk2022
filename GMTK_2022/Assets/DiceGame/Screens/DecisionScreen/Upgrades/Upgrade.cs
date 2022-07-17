@@ -39,7 +39,8 @@ namespace DiceGame
             string a when a.Contains("attack") => "attack",
             string b when b.Contains("armor") => "armor",
             string c when c.Contains("health") => "health",
-            _ => "updade"
+            string d when d.Contains("heal") => "health", //TODO: add icon for heal
+            _ => "upgrade"
         };
 
         public string StatKey { get; }
