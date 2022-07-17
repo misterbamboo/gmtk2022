@@ -1,4 +1,7 @@
+using DiceGame;
+using DiceGame.Combat.Entities.CharacterAggregate;
 using DiceGame.Utils;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +9,10 @@ public class HealthBarComponent : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] RectTransform healthBarImage;
+    [SerializeField] TextMeshProUGUI healthText;
+    [SerializeField] Image healthImage;
+    [SerializeField] CharacterComponent characterComponent;
+
 
     [Header("Ratio")]
     [SerializeField]
@@ -19,25 +26,35 @@ public class HealthBarComponent : MonoBehaviour
 
     TrackValueChange<bool> trackIsEnemyChange = new TrackValueChange<bool>();
 
-    private void OnDrawGizmos()
+    private void Start()
     {
+        if (characterComponent == null)
+        {
+            Debug.LogError("characterComponent is null. Remember to bind you health bar to a character component");
+        }
         RedrawImage();
     }
 
-    void Update()
+    public void RedrawImage()
     {
-        RedrawImage();
-    }
+        var character = characterComponent?.Character;
+        if (character == null) return;
 
-    public void SetPercentageRatio(float value)
-    {
-        percentageRatio = Mathf.Clamp(value, 0, 1);
-    }
-
-    private void RedrawImage()
-    {
+        percentageRatio = Mathf.Clamp(character.CurrentHealth / character.MaxLife, 0, 1);
+        SetIcon(character);
+        SetLabel(character);
         CheckColorChange();
         CheckImageSize();
+    }
+
+    private void SetIcon(Character character)
+    {
+        healthImage.sprite = character.CurrentArmor > 0 ? Sprites.Instance.Get("shield") : Sprites.Instance.Get("health");
+    }
+
+    private void SetLabel(Character character)
+    {
+        healthText.text = character.CurrentArmor > 0 ? character.CurrentArmor.ToString() : character.CurrentHealth.ToString();
     }
 
     private void CheckColorChange()

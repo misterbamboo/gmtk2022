@@ -132,8 +132,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4370ca21db307b45b15bd8cd1bc74fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLife: 50
-  life: 50
   healthBar: {fileID: 715696585229939691}
   imageTransform: {fileID: 4823743081038646102}
 --- !u!61 &8482101869178187056
@@ -377,6 +375,10 @@ PrefabInstance:
       propertyPath: percentageRatio
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3923381678228387046, guid: 8924245244561e44b936fe343a5dc633, type: 3}
+      propertyPath: characterComponent
+      value: 
+      objectReference: {fileID: 5210734252980750272}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8924245244561e44b936fe343a5dc633, type: 3}
 --- !u!114 &715696585229939691 stripped

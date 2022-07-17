@@ -26,7 +26,7 @@ namespace DiceGame
                 ResetBag();
             }
 
-            var result = dices.Skip(currentDiceIndex - count).Take(count);
+            var result = dices.Skip(currentDiceIndex).Take(count);
             currentDiceIndex += count;
 
             return result;

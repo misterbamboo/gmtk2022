@@ -21,9 +21,10 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
             stats = characterStats;
             currentHealth = characterStats.MaxLife;
         }
-
         public int Id => id;
+
         public int CurrentHealth => currentHealth;
+        public int CurrentArmor => currentArmor;
         public float MaxLife => stats.MaxLife;
         public bool IsDead => currentHealth <= 0;
         public ICharacterStats Stats => stats;
@@ -31,7 +32,23 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
         public void TakeDamage(int amount)
         {
             OnReceiveDamagePipeline(amount);
-            currentHealth = Mathf.Clamp(currentHealth - amount, 0, stats.MaxLife);
+            if (currentArmor > 0)
+            {
+                var damageLeft = amount - currentArmor;
+                if (damageLeft <= 0)
+                {
+                    currentArmor -= amount;
+                }
+                else
+                {
+                    currentArmor = 0;
+                    currentHealth = Mathf.Clamp(currentHealth - damageLeft, 0, stats.MaxLife);
+                }
+            }
+            else
+            {
+                currentHealth = Mathf.Clamp(currentHealth - amount, 0, stats.MaxLife);
+            }
             GameEvents.Raise(new CharacterTookDamageEvent(id, amount));
 
             if (IsDead)

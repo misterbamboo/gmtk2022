@@ -959,7 +959,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8777091458289243052, guid: 13e22b0060fdf60499cbe83246d00da5, type: 3}
       propertyPath: sprites.Array.size
-      value: 41
+      value: 42
       objectReference: {fileID: 0}
     - target: {fileID: 8777091458289243052, guid: 13e22b0060fdf60499cbe83246d00da5, type: 3}
       propertyPath: sprites.Array.data[0]
@@ -1128,7 +1128,7 @@ PrefabInstance:
     - target: {fileID: 8777091458289243052, guid: 13e22b0060fdf60499cbe83246d00da5, type: 3}
       propertyPath: sprites.Array.data[41]
       value: 
-      objectReference: {fileID: 21300000, guid: ca967658c3622a3449797432ce6333f1, type: 3}
+      objectReference: {fileID: 21300000, guid: bc8417a32bef8234e8f7201dea1237bc, type: 3}
     - target: {fileID: 8777091458289243052, guid: 13e22b0060fdf60499cbe83246d00da5, type: 3}
       propertyPath: sprites.Array.data[42]
       value: 
