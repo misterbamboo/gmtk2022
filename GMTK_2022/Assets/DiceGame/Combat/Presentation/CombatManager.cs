@@ -41,7 +41,10 @@ public class CombatManager : MonoBehaviour
         var enemyStatsPerType = statsManager.GetEnemyStats();
 
         combatAnimator = GetComponent<CombatAnimatorComponent>();
-        combatController = new CombatController(minNumberOfEnemies, maxNumberOfEnemies, enemyStatsPerType, playerPrefab.maxLife);
+
+        // TODO: Load real player stats
+        var playerStats = new CharacterStats(playerPrefab.maxLife, playerPrefab.maxLife, playerPrefab.maxLife);
+        combatController = new CombatController(minNumberOfEnemies, maxNumberOfEnemies, enemyStatsPerType, playerStats);
         SubscribeEvents();
         combatController.NewCombat();
     }
@@ -53,15 +56,20 @@ public class CombatManager : MonoBehaviour
         GameEvents.Subscribe<EnemyUnselectedEvent>(EventsReceiver);
         GameEvents.Subscribe<EnemyTakeDamageEvent>(EventsReceiver);
         GameEvents.Subscribe<EnemyKilledEvent>(EventsReceiver);
+        GameEvents.Subscribe<PlayerKilledEvent>(OnPlayerKilled);
         GameEvents.Subscribe<TurnStartedEvent>((e) => combatController.OnTurnStarted(e));
         GameEvents.Subscribe<EnemyDecisionTakenEvent>(OnEnemyDecisionTaken);
+
     }
 
     private void OnEnemyDecisionTaken(EnemyDecisionTakenEvent enemyDecisionTakenEvent)
     {
         var sourceTransform = FindCharacterTransform(enemyDecisionTakenEvent.EnemyDecision.SourceId);
         var targetTransform = FindCharacterTransform(enemyDecisionTakenEvent.EnemyDecision.TargetId);
-        combatAnimator.QueueAnimationForEnemyDecision(enemyDecisionTakenEvent.EnemyDecision.Decision, sourceTransform, targetTransform);
+        combatAnimator.QueueAnimationForEnemyDecision(enemyDecisionTakenEvent.EnemyDecision, sourceTransform, targetTransform, () =>
+        {
+            combatController.ResolveEnemyDecision(enemyDecisionTakenEvent.EnemyDecision);
+        });
     }
 
     private Transform FindCharacterTransform(int characterId)
@@ -72,7 +80,7 @@ public class CombatManager : MonoBehaviour
             return souceEnemy.transform;
         }
 
-        if(playerComponent.GetCharacterID() == characterId)
+        if (playerComponent.GetCharacterID() == characterId)
         {
             return playerComponent.transform;
         }
@@ -113,6 +121,11 @@ public class CombatManager : MonoBehaviour
         if (gameEvent is EnemyKilledEvent) DestroyEnemyComponent((EnemyKilledEvent)gameEvent);
     }
 
+    private void OnPlayerKilled(PlayerKilledEvent playerKilled)
+    {
+        Destroy(playerComponent.gameObject);
+    }
+
     private void DestroyEnemyComponent(EnemyKilledEvent gameEvent)
     {
         var enemyComponent = enemiesComponents.FirstOrDefault(c => c.Enemy?.Id == gameEvent.Id);
@@ -135,6 +148,7 @@ public class CombatManager : MonoBehaviour
     private void InitGameObjects()
     {
         ClearEnemiesGameObjects();
+        ClearPlayerGameObjects(playerComponent);
 
         float index = 0;
         foreach (var enemy in combatController.Enemies)
@@ -151,6 +165,14 @@ public class CombatManager : MonoBehaviour
 
         playerComponent = Instantiate(playerPrefab.component, new Vector3(-4, characterDisplayOffsetY, 0), Quaternion.identity);
         playerComponent.Player = combatController.Player;
+    }
+
+    private void ClearPlayerGameObjects(PlayerComponent playerComponent)
+    {
+        if (playerComponent != null)
+        {
+            Destroy(playerComponent.gameObject);
+        }
     }
 
     private void ClearEnemiesGameObjects()

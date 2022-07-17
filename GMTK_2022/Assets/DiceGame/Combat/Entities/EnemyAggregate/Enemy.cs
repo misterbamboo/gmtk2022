@@ -1,11 +1,12 @@
 ﻿using Assets.DiceGame.Combat.Entities.CombatActionAggregate;
+using Assets.DiceGame.Combat.Entities.Shared;
 using Assets.DiceGame.Combat.Events;
 using Assets.DiceGame.SharedKernel;
 using System.Collections.Generic;
 
 namespace Assets.DiceGame.Combat.Entities.EnemyAggregate
 {
-    public class Enemy
+    public class Enemy : ICharacter
     {
         private static int nextId;
 

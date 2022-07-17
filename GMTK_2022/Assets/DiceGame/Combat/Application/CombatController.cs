@@ -7,6 +7,9 @@ using System;
 using System.Collections.Generic;
 using Assets.DiceGame.Combat.Application.Exceptions;
 using Assets.DiceGame.Combat.Entities.CombatActionAggregate;
+using System.Linq;
+using Assets.DiceGame.Combat.Entities.Shared;
+using Assets.DiceGame.Combat.Entities.Exceptions;
 
 namespace Assets.DiceGame.Combat.Application
 {
@@ -26,13 +29,13 @@ namespace Assets.DiceGame.Combat.Application
         private Enemy focusedEnemy;
         private List<EnemyDecision> pendingEnemyDecisions = new List<EnemyDecision>();
 
-        public CombatController(int minNumberOfEnnemies, int maxNumberOfEnemies, IDictionary<EnemyType, ICharacterStats> enemyStatsPerType, float playerDefaultLife)
+        public CombatController(int minNumberOfEnnemies, int maxNumberOfEnemies, IDictionary<EnemyType, ICharacterStats> enemyStatsPerType, ICharacterStats playerStats)
         {
             this.minNumberOfEnnemies = minNumberOfEnnemies;
             this.maxNumberOfEnemies = maxNumberOfEnemies;
             this.enemyStatsPerType = enemyStatsPerType;
             Enemies = new List<Enemy>(maxNumberOfEnemies);
-            Player = new Player(playerDefaultLife);
+            Player = new Player(playerStats.MaxLife, playerStats.Attack);
             enemyPlayerAI = new EnemyPlayerAI(Player, Enemies);
         }
 
@@ -65,6 +68,37 @@ namespace Assets.DiceGame.Combat.Application
             return stats;
         }
 
+        public void ResolveEnemyDecision(EnemyDecision enemyDecision)
+        {
+            var sourceCharacter = GetCharacterFromId(enemyDecision.SourceId);
+            var targetCharacter = GetCharacterFromId(enemyDecision.TargetId);
+            var damages = Translate(sourceCharacter, targetCharacter);
+            HitCharacter(targetCharacter, damages);
+            pendingEnemyDecisions.Remove(enemyDecision);
+        }
+
+        // TODO: Replace with Jeremie's transation mechanics
+        private float Translate(ICharacter sourceCharacter, ICharacter targetCharacter)
+        {
+            return sourceCharacter.Attack;
+        }
+
+        private ICharacter GetCharacterFromId(int id)
+        {
+            if (id == Player.Id)
+            {
+                return Player;
+            }
+
+            var sourceEnemy = Enemies.FirstOrDefault(e => e.Id == id);
+            if (sourceEnemy != null)
+            {
+                return sourceEnemy;
+            }
+
+            throw new CharacterNotFoundException(id);
+        }
+
         public void OnFocusEnemy(Enemy enemy)
         {
             if (focusedEnemy != null)
@@ -95,15 +129,29 @@ namespace Assets.DiceGame.Combat.Application
         public void HitFocusEnemy(float damages)
         {
             if (focusedEnemy == null) return;
+            HitCharacter(focusedEnemy, damages);
 
-            var enemyToHit = focusedEnemy;
-            enemyToHit.Hit(damages);
-
-            if (enemyToHit.IsDead())
+            if (focusedEnemy.IsDead())
             {
                 OnUnfocusEnemy();
-                Enemies.Remove(enemyToHit);
-                GameEvents.Raise(new EnemyKilledEvent(enemyToHit.Id));
+            }
+        }
+
+        private void HitCharacter(ICharacter character, float damages)
+        {
+            character.Hit(damages);
+
+            if (character.IsDead())
+            {
+                if (Enemies.Contains(character))
+                {
+                    Enemies.Remove((Enemy)character);
+                    GameEvents.Raise(new EnemyKilledEvent(character.Id));
+                }
+                else
+                {
+                    GameEvents.Raise(new PlayerKilledEvent());
+                }
             }
         }
 

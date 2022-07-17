@@ -1,47 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.DiceGame.Combat.Presentation.Animations.Kinds
 {
-    public class AttackAnimation
+    public class AttackAnimation : BaseAnimation
     {
-        public bool IsCompleted { get; private set; }
-
-        private Transform animatedTransform;
-        private Vector3 sourceInitPos;
-        private Vector3 targetInitPos;
-        private float duration;
-        private float time;
-
-        public AttackAnimation(Transform sourceTransform, Vector3 targetPos, float durationInSecs)
+        public AttackAnimation(Transform sourceTransform, Vector3 targetPos, float durationInSecs, Action callback)
+            : base(sourceTransform, targetPos, durationInSecs, callback)
         {
-            animatedTransform = sourceTransform;
-            sourceInitPos = sourceTransform.position;
-            targetInitPos = targetPos;
-            duration = durationInSecs;
-            time = 0;
         }
 
-        public void Update()
+        protected override float EaseFonction(float p)
         {
-            if (time < duration)
-            {
-                time += Time.deltaTime;
-                var p = time / duration;
-                var easeT = Spike(p);
-
-                if (time > duration)
-                {
-                    time = duration;
-                    IsCompleted = true;
-                }
-
-                animatedTransform.position = Vector3.Lerp(sourceInitPos, targetInitPos, easeT);
-            }
+            return Spike(p);
         }
 
         // https://www.febucci.com/2018/08/easing-functions/
