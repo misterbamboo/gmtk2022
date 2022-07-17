@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - CombatManager
+  - UpgradeManager
   layers:
   - Default
   - TransparentFX

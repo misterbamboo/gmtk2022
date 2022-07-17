@@ -27,8 +27,8 @@ public class UIDecision : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void UpdateLabels(Decision decision)
     {
-        playerUpgradeIcon.sprite = Sprites.Instance.Get(decision.playerUpgrade.IconName);
-        playerUpgradeLabel.text = decision.playerUpgrade.Label;
+        playerUpgradeIcon.sprite = Sprites.Instance.Get(decision.PlayerUpgrade.IconName);
+        playerUpgradeLabel.text = decision.PlayerUpgrade.Label;
 
         enemyUpgradeIcon.sprite = Sprites.Instance.Get(decision.EnemyUpgrade.IconName);
         enemyUpgradeLabel.text = decision.EnemyUpgrade.Label;
