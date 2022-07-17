@@ -50,7 +50,6 @@ public class CombatManager : MonoBehaviour
     {
         GameEvents.Subscribe<DecisionCompletedEvent>(OnDecisionCompleted);
 
-        GameEvents.Subscribe<EnemyTakeDamageEvent>(EventsReceiver);
         GameEvents.Subscribe<TurnStartedEvent>(OnTurnStarted);
         GameEvents.Subscribe<CombatStartedEvent>(EventsReceiver);
         GameEvents.Subscribe<CombatActionSentEvent>(OnEnemyDecisionTaken);
@@ -84,7 +83,7 @@ public class CombatManager : MonoBehaviour
         // When we add the logic of hitting X times, we raise X attack event event if the
         // Target could die after 1 attack. So if the transorm is null, if probably because
         // the CharacterComponent was deleted before the Coroutine is done
-        if (IsSourceOrTargetIsAlife(sourceTransform, targetTransform))
+        if (IsSourceOrTargetIsAlive(sourceTransform, targetTransform))
         {
             combatAnimator.QueueAnimationForEnemyDecision(combatEvent.CombatAction, sourceTransform, targetTransform, () =>
             {
@@ -98,7 +97,7 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    private static bool IsSourceOrTargetIsAlife(Transform sourceTransform, Transform targetTransform)
+    private static bool IsSourceOrTargetIsAlive(Transform sourceTransform, Transform targetTransform)
     {
         return sourceTransform != null && targetTransform != null;
     }
