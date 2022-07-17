@@ -19,30 +19,40 @@ MonoBehaviour:
     value: 2
   - statKey: player_health
     value: 60
+  - statKey: player_heal
+    value: 2
   - statKey: pawn_attack
     value: 1
   - statKey: pawn_armor
     value: 1
   - statKey: pawn_health
     value: 10
+  - statKey: pawn_heal
+    value: 2
   - statKey: iron_attack
     value: 2
   - statKey: iron_armor
     value: 1
   - statKey: iron_health
     value: 25
+  - statKey: iron_heal
+    value: 2
   - statKey: domino_attack
     value: 5
   - statKey: domino_armor
     value: 10
   - statKey: domino_health
     value: 50
+  - statKey: domino_heal
+    value: 2
   - statKey: king_attack
     value: 20
   - statKey: king_armor
     value: 40
   - statKey: king_health
     value: 100
+  - statKey: king_heal
+    value: 2
   - statKey: battle_min_ennemies
     value: 1
   - statKey: battle_max_ennemies

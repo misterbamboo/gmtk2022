@@ -35,28 +35,32 @@ public class GameStatsManager : MonoBehaviour
                     new CharacterStats(
                         gameStats[StatKeys.Ennemies.pawn_attack],
                         gameStats[StatKeys.Ennemies.pawn_armor],
-                        gameStats[StatKeys.Ennemies.pawn_health])
+                        gameStats[StatKeys.Ennemies.pawn_health],
+                        gameStats[StatKeys.Ennemies.pawn_heal])
             },
             {
                 EnemyType.ChessKing,
                     new CharacterStats(
                         gameStats[StatKeys.Ennemies.king_attack],
                         gameStats[StatKeys.Ennemies.king_armor],
-                        gameStats[StatKeys.Ennemies.king_health])
+                        gameStats[StatKeys.Ennemies.king_health],
+                        gameStats[StatKeys.Ennemies.king_heal])
             },
             {
                 EnemyType.Domino,
                     new CharacterStats(
                         gameStats[StatKeys.Ennemies.domino_attack],
                         gameStats[StatKeys.Ennemies.domino_armor],
-                        gameStats[StatKeys.Ennemies.domino_health])
+                        gameStats[StatKeys.Ennemies.domino_health],
+                        gameStats[StatKeys.Ennemies.domino_heal])
             },
             {
                 EnemyType.Iron,
                     new CharacterStats(
                         gameStats[StatKeys.Ennemies.iron_attack],
                         gameStats[StatKeys.Ennemies.iron_armor],
-                        gameStats[StatKeys.Ennemies.iron_health])
+                        gameStats[StatKeys.Ennemies.iron_health],
+                        gameStats[StatKeys.Ennemies.iron_heal])
             }
         };
     }
