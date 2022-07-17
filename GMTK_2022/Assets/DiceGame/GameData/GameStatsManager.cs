@@ -19,10 +19,26 @@ public class GameStatsManager : MonoBehaviour
         if (gameStats.ContainsKey(statKey))
         {
             gameStats[statKey] += valueIncrease;
+            ApplyEnnemiesCountLimitations();
         }
         else
         {
             throw new System.Exception($"Stat key ({statKey}) not found in game stats sheet");
+        }
+    }
+
+    private void ApplyEnnemiesCountLimitations()
+    {
+        var minEnemies = gameStats[StatKeys.Battle.min_ennemies];
+        var maxEnemies = gameStats[StatKeys.Battle.max_ennemies];
+        if (minEnemies > maxEnemies)
+        {
+            gameStats[StatKeys.Battle.max_ennemies] = minEnemies;
+        }
+
+        if (maxEnemies < minEnemies)
+        {
+            gameStats[StatKeys.Battle.max_ennemies] = minEnemies;
         }
     }
 
@@ -67,12 +83,16 @@ public class GameStatsManager : MonoBehaviour
 
     public ICharacterStats GetPlayerStats()
     {
-        return 
+        return
             new CharacterStats(
                 gameStats[StatKeys.Player.attack],
                 gameStats[StatKeys.Player.armor],
                 gameStats[StatKeys.Player.health],
                 gameStats[StatKeys.Player.heal]);
     }
+
+    public int GetMinEnemies() => gameStats[StatKeys.Battle.min_ennemies];
+
+    public int GetMaxEnemies() => gameStats[StatKeys.Battle.min_ennemies];
 }
 

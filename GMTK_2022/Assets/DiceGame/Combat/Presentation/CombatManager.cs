@@ -29,8 +29,6 @@ public class CombatManager : MonoBehaviour
     [SerializeField] PlayerPrefabDefinition playerPrefab;
 
     [Header("Enemies")]
-    [SerializeField] int minNumberOfEnemies = 1;
-    [SerializeField] int maxNumberOfEnemies = 4;
     [SerializeField] List<EnemyPrefabDefinition> enemyPrefabs;
 
     List<EnemyComponent> enemiesComponents = new List<EnemyComponent>();
@@ -76,6 +74,9 @@ public class CombatManager : MonoBehaviour
     {
         var enemyStatsPerType = statsManager.GetEnemyStats();
         var playerStats = statsManager.GetPlayerStats();
+
+        var minNumberOfEnemies = statsManager.GetMinEnemies();
+        var maxNumberOfEnemies = statsManager.GetMaxEnemies();
 
         combatController = new CombatController(minNumberOfEnemies, maxNumberOfEnemies, enemyStatsPerType, playerStats);
         combatController.StartCombat();
