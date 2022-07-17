@@ -13,13 +13,13 @@ namespace DiceGame
 
     public struct Decision
     {
-        public Upgrade playerUpgrade { get; }
+        public Upgrade PlayerUpgrade { get; }
         public Upgrade EnemyUpgrade { get; }
 
         public Decision(Upgrade playerUpgrade, Upgrade enemyUpgrade)
         {
-            this.playerUpgrade = playerUpgrade;
-            this.EnemyUpgrade = enemyUpgrade;
+            PlayerUpgrade = playerUpgrade;
+            EnemyUpgrade = enemyUpgrade;
         }
 
         public static Decision Generate()
