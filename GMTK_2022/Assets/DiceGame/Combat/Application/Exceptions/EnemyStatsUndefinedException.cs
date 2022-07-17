@@ -1,7 +1,7 @@
-﻿using Assets.DiceGame.Combat.Entities.EnemyAggregate;
+﻿using DiceGame.Combat.Entities.EnemyAggregate;
 using System;
 
-namespace Assets.DiceGame.Combat.Application.Exceptions
+namespace DiceGame.Combat.Application.Exceptions
 {
     public class EnemyStatsUndefinedException : Exception
     {

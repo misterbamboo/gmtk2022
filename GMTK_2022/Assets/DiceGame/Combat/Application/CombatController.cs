@@ -1,33 +1,29 @@
-using Assets.DiceGame.Combat.Entities.EnemyAggregate;
-using Assets.DiceGame.Combat.Entities;
-using Assets.DiceGame.Combat.Events;
-using Assets.DiceGame.SharedKernel;
-using Assets.DiceGame.Turn.Events;
+using DiceGame.Combat.Entities.EnemyAggregate;
+using DiceGame.Combat.Entities;
+using DiceGame.Combat.Events;
+using DiceGame.SharedKernel;
+using DiceGame.Turn.Events;
 using System;
 using System.Collections.Generic;
-using Assets.DiceGame.Combat.Application.Exceptions;
-using Assets.DiceGame.Combat.Entities.CombatActionAggregate;
+using DiceGame.Combat.Application.Exceptions;
+using DiceGame.Combat.Entities.CombatActionAggregate;
 using System.Linq;
-using Assets.DiceGame.Combat.Entities.Shared;
-using Assets.DiceGame.Combat.Entities.Exceptions;
+using DiceGame.Combat.Entities.Exceptions;
+using DiceGame.Combat.Entities.CharacterAggregate;
 
-namespace Assets.DiceGame.Combat.Application
+namespace DiceGame.Combat.Application
 {
     public class CombatController
     {
-        public bool HasTarget => focusedEnemy != null;
-
         public Player Player { get; private set; }
 
         public List<Enemy> Enemies { get; private set; }
+
         private EnemyPlayerAI enemyPlayerAI;
 
         private readonly int minNumberOfEnnemies;
         private readonly int maxNumberOfEnemies;
         private readonly IDictionary<EnemyType, ICharacterStats> enemyStatsPerType;
-
-        private Enemy focusedEnemy;
-        private List<EnemyDecision> pendingEnemyDecisions = new List<EnemyDecision>();
 
         public CombatController(int minNumberOfEnnemies, int maxNumberOfEnemies, IDictionary<EnemyType, ICharacterStats> enemyStatsPerType, ICharacterStats playerStats)
         {
@@ -35,15 +31,18 @@ namespace Assets.DiceGame.Combat.Application
             this.maxNumberOfEnemies = maxNumberOfEnemies;
             this.enemyStatsPerType = enemyStatsPerType;
             Enemies = new List<Enemy>(maxNumberOfEnemies);
-            Player = new Player(playerStats.MaxLife, playerStats.Attack);
+            Player = new Player(playerStats);
             enemyPlayerAI = new EnemyPlayerAI(Player, Enemies);
         }
 
-        public void NewCombat()
+        public void StartCombat()
         {
-            Enemies.Clear();
-            Player.ResetLife();
+            GenerateEnemies(minNumberOfEnnemies, maxNumberOfEnemies);
+            GameEvents.Raise(new NewCombatReadyEvent());
+        }
 
+        private void GenerateEnemies(int minNumberOfEnnemies, int maxNumberOfEnemies)
+        {
             var count = UnityEngine.Random.Range(minNumberOfEnnemies, maxNumberOfEnemies + 1);
             var enemyTypeValues = Enum.GetValues(typeof(EnemyType));
             for (int i = 0; i < count; i++)
@@ -54,8 +53,6 @@ namespace Assets.DiceGame.Combat.Application
 
                 Enemies.Add(new Enemy(enemyType, enemyStats));
             }
-
-            GameEvents.Raise(new NewCombatReadyEvent());
         }
 
         private ICharacterStats GetEnemyStatsFromType(EnemyType enemyType)
@@ -68,24 +65,15 @@ namespace Assets.DiceGame.Combat.Application
             return stats;
         }
 
-        public void ResolveEnemyDecision(EnemyDecision enemyDecision)
+        public void DispatchCombatAction(CombatAction combatAction)
         {
-            var sourceCharacter = GetCharacterFromId(enemyDecision.SourceId);
-            var targetCharacter = GetCharacterFromId(enemyDecision.TargetId);
-            var damages = Translate(sourceCharacter, targetCharacter);
-            HitCharacter(targetCharacter, damages);
-            pendingEnemyDecisions.Remove(enemyDecision);
+            var targetCharacters = combatAction.TargetIds.Select(t => GetCharacterFromId(t)).ToList();
+            targetCharacters.ForEach(c => c.ReceiveAction(combatAction));
         }
 
-        // TODO: Replace with Jeremie's transation mechanics
-        private float Translate(ICharacter sourceCharacter, ICharacter targetCharacter)
+        private Character GetCharacterFromId(int id)
         {
-            return sourceCharacter.Attack;
-        }
-
-        private ICharacter GetCharacterFromId(int id)
-        {
-            if (id == Player.Id)
+            if (id == Player.PlayerId)
             {
                 return Player;
             }
@@ -99,71 +87,11 @@ namespace Assets.DiceGame.Combat.Application
             throw new CharacterNotFoundException(id);
         }
 
-        public void OnFocusEnemy(Enemy enemy)
-        {
-            if (focusedEnemy != null)
-            {
-                if (focusedEnemy.Id == enemy.Id)
-                {
-                    // Didn't changed ...
-                    return;
-                }
-
-                GameEvents.Raise(new EnemyUnselectedEvent(focusedEnemy.Id));
-            }
-
-            focusedEnemy = enemy;
-            GameEvents.Raise(new EnemySelectedEvent(focusedEnemy.Id));
-        }
-
-        public void OnUnfocusEnemy()
-        {
-            if (focusedEnemy != null)
-            {
-                var id = focusedEnemy.Id;
-                focusedEnemy = null;
-                GameEvents.Raise(new EnemyUnselectedEvent(id));
-            }
-        }
-
-        public void HitFocusEnemy(float damages)
-        {
-            if (focusedEnemy == null) return;
-            HitCharacter(focusedEnemy, damages);
-
-            if (focusedEnemy.IsDead())
-            {
-                OnUnfocusEnemy();
-            }
-        }
-
-        private void HitCharacter(ICharacter character, float damages)
-        {
-            character.Hit(damages);
-
-            if (character.IsDead())
-            {
-                if (Enemies.Contains(character))
-                {
-                    Enemies.Remove((Enemy)character);
-                    GameEvents.Raise(new EnemyKilledEvent(character.Id));
-                }
-                else
-                {
-                    GameEvents.Raise(new PlayerKilledEvent());
-                }
-            }
-        }
-
         public void OnTurnStarted(TurnStartedEvent e)
         {
             if (e.IsEnemyPlayerTurn())
             {
-                foreach (var enemyDecision in enemyPlayerAI.EnemiesTakeDecisions())
-                {
-                    pendingEnemyDecisions.Add(enemyDecision);
-                    GameEvents.Raise(new EnemyDecisionTakenEvent(enemyDecision));
-                }
+                enemyPlayerAI.EnemiesTakeDecisions();
             }
         }
     }

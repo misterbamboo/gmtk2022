@@ -1,13 +1,17 @@
-using Assets.DiceGame.Utils;
+using DiceGame.Utils;
+using DiceGame.Combat.Entities.CharacterAggregate;
 using System.Collections;
 using UnityEngine;
 
-public abstract class LivingComponent : MonoBehaviour
+public abstract class CharacterComponent : MonoBehaviour
 {
     [SerializeField] protected float maxLife = 100;
     [SerializeField] protected float life;
     [SerializeField] protected HealthBarComponent healthBar;
     [SerializeField] protected Transform imageTransform;
+
+    public int CharacterId => Character?.Id ?? -1;
+    public Character Character { get; set; }
 
     private TrackValueChange<float, float> lifeRatioChanges = new TrackValueChange<float, float>();
 
@@ -55,9 +59,14 @@ public abstract class LivingComponent : MonoBehaviour
         UpdateLifeRatio();
     }
 
-    protected abstract void UpdateEnemyInfo();
-
-    public abstract int GetCharacterID();
+    protected void UpdateEnemyInfo()
+    {
+        if (Character != null)
+        {
+            life = Character.CurrentHealth;
+            maxLife = Character.MaxLife;
+        }
+    }
 
     private void UpdateLifeRatio()
     {

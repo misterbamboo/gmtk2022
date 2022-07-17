@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.DiceGame.SharedKernel
+namespace DiceGame.SharedKernel
 {
     public class GameEvents : MonoBehaviour
     {

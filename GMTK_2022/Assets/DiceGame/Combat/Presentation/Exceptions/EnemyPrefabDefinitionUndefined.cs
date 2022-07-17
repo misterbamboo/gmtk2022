@@ -1,7 +1,7 @@
-﻿using Assets.DiceGame.Combat.Entities.EnemyAggregate;
+﻿using DiceGame.Combat.Entities.EnemyAggregate;
 using System;
 
-namespace Assets.DiceGame.Combat.Presentation.Exceptions
+namespace DiceGame.Combat.Presentation.Exceptions
 {
     public class EnemyPrefabDefinitionUndefined : Exception
     {

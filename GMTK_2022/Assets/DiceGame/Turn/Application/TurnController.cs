@@ -1,9 +1,9 @@
-﻿using Assets.DiceGame.SharedKernel;
-using Assets.DiceGame.Turn.Events;
+﻿using DiceGame.SharedKernel;
+using DiceGame.Turn.Events;
 using System;
 using UnityEngine;
 
-namespace Assets.DiceGame.Turn.Application
+namespace DiceGame.Turn.Application
 {
     public class TurnController
     {

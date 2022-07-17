@@ -1,8 +1,8 @@
-﻿using Assets.DiceGame.Combat.Entities.EnemyAggregate;
+﻿using DiceGame.Combat.Entities.EnemyAggregate;
 using System;
 using UnityEngine;
 
-namespace Assets.DiceGame.Combat.Presentation.Inspector
+namespace DiceGame.Combat.Presentation.Inspector
 {
     [Serializable]
     public class EnemyPrefabDefinition

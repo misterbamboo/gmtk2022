@@ -1,6 +1,6 @@
-﻿using Assets.DiceGame.SharedKernel;
+﻿using DiceGame.SharedKernel;
 
-namespace Assets.DiceGame.Turn.Events
+namespace DiceGame.Turn.Events
 {
     public class TurnEndedEvent : IGameEvent
     {

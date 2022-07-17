@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.DiceGame.Combat.Presentation.Exceptions
+namespace DiceGame.Combat.Presentation.Exceptions
 {
     public class CharacterTransformNotFound : Exception
     {

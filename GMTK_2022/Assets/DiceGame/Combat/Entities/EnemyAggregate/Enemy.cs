@@ -1,67 +1,47 @@
-﻿using Assets.DiceGame.Combat.Entities.CombatActionAggregate;
-using Assets.DiceGame.Combat.Entities.Shared;
-using Assets.DiceGame.Combat.Events;
-using Assets.DiceGame.SharedKernel;
+﻿using DiceGame.Combat.Entities.CombatActionAggregate;
+using DiceGame.Combat.Events;
+using DiceGame.SharedKernel;
+using DiceGame.Combat.Entities.CharacterAggregate;
 using System.Collections.Generic;
 
-namespace Assets.DiceGame.Combat.Entities.EnemyAggregate
+namespace DiceGame.Combat.Entities.EnemyAggregate
 {
-    public class Enemy : ICharacter
+    public class Enemy : Character
     {
         private static int nextId;
 
-        public int Id { get; }
         public EnemyType Type { get; private set; }
-        public float Life { get; private set; }
-        public float MaxLife { get; private set; }
-        public float Defence { get; private set; }
-        public float Attack { get; private set; }
 
         public Enemy(EnemyType type, ICharacterStats stats)
+            : base(++nextId, stats)
         {
-            Id = ++nextId;
             Type = type;
-            MaxLife = stats.MaxLife;
-            Life = stats.MaxLife;
-            Attack = stats.Attack;
-            Defence = stats.Defence;
         }
 
-        public void Hit(float damages)
+        public void TakeDecision(Player player, List<Enemy> enemies)
         {
-            Life -= damages;
-            GameEvents.Raise(new EnemyTakeDamageEvent(Id, damages));
-        }
-
-        public virtual EnemyDecision TakeDecision(Player player, List<Enemy> enemies)
-        {
-            if (Attack > player.Life)
+            if (stats.Attack > player.CurrentHealth)
             {
-                return ChooseAttack();
+                TakeAttackAction(Player.PlayerId);
             }
-            else if (Life < MaxLife / 4)
+            else if (currentHealth < MaxLife / 4)
             {
-                return ChooseDefence();
+                TakeShieldSelfAction();
             }
             else
             {
-                return ChooseAttack();
+                TakeAttackAction(Player.PlayerId);
             }
         }
 
-        private EnemyDecision ChooseAttack()
+        private EnemyDecisionObsolete ChooseAttack()
         {
-            return new EnemyDecision(EnemyDecisionType.Attack, Id, Player.Id);
+            return new EnemyDecisionObsolete(EnemyDecisionType.Attack, Id, Player.PlayerId);
         }
 
-        private EnemyDecision ChooseDefence()
+        private EnemyDecisionObsolete ChooseDefence()
         {
-            return new EnemyDecision(EnemyDecisionType.Defence, Id, Id);
-        }
-
-        public bool IsDead()
-        {
-            return Life <= 0;
+            return new EnemyDecisionObsolete(EnemyDecisionType.Defence, Id, Id);
         }
     }
 }

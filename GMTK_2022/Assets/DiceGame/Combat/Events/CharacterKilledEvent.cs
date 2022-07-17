@@ -1,12 +1,12 @@
-﻿using Assets.DiceGame.SharedKernel;
+﻿using DiceGame.SharedKernel;
 
-namespace Assets.DiceGame.Combat.Events
+namespace DiceGame.Combat.Events
 {
-    public class EnemyKilledEvent : IGameEvent
+    public class CharacterKilledEvent : IGameEvent
     {
         public int Id { get; }
 
-        public EnemyKilledEvent(int id)
+        public CharacterKilledEvent(int id)
         {
             Id = id;
         }

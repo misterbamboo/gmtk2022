@@ -1,4 +1,4 @@
-namespace Assets.DiceGame.Utils
+namespace DiceGame.Utils
 {
     public class TrackValueChange<T>
     {

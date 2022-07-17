@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Assets.DiceGame.Combat.Entities.EnemyAggregate;
+using DiceGame.Combat.Entities.EnemyAggregate;
 using DiceGame.GameData;
 using UnityEngine;
 
@@ -63,6 +63,16 @@ public class GameStatsManager : MonoBehaviour
                         gameStats[StatKeys.Ennemies.iron_heal])
             }
         };
+    }
+
+    public ICharacterStats GetPlayerStats()
+    {
+        return 
+            new CharacterStats(
+                gameStats[StatKeys.Player.attack],
+                gameStats[StatKeys.Player.armor],
+                gameStats[StatKeys.Player.health],
+                gameStats[StatKeys.Player.heal]);
     }
 }
 

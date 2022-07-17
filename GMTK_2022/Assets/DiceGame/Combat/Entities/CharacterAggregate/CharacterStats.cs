@@ -1,4 +1,4 @@
-﻿namespace Assets.DiceGame.Combat.Entities.EnemyAggregate
+﻿namespace DiceGame.Combat.Entities.EnemyAggregate
 {
     public interface ICharacterStats
     {

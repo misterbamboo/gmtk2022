@@ -1,7 +1,7 @@
-﻿using Assets.DiceGame.SharedKernel;
+﻿using DiceGame.SharedKernel;
 using System;
 
-namespace Assets.DiceGame.Turn.Events
+namespace DiceGame.Turn.Events
 {
     public class TurnStartedEvent : IGameEvent
     {

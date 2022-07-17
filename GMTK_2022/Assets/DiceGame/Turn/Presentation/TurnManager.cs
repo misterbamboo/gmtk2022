@@ -1,9 +1,9 @@
-﻿using Assets.DiceGame.SharedKernel;
-using Assets.DiceGame.Turn.Application;
-using Assets.DiceGame.Turn.Events;
+﻿using DiceGame.SharedKernel;
+using DiceGame.Turn.Application;
+using DiceGame.Turn.Events;
 using UnityEngine;
 
-namespace Assets.DiceGame.Turn.Presentation
+namespace DiceGame.Turn.Presentation
 {
     public class TurnManager : MonoBehaviour
     {

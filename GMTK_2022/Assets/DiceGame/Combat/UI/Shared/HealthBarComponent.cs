@@ -1,4 +1,4 @@
-using Assets.DiceGame.Utils;
+using DiceGame.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 

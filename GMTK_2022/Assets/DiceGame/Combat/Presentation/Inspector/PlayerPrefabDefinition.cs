@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.DiceGame.Combat.Presentation.Inspector
+namespace DiceGame.Combat.Presentation.Inspector
 {
     [Serializable]
 

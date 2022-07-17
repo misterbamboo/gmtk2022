@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.DiceGame.Combat.Entities.Exceptions
+namespace DiceGame.Combat.Entities.Exceptions
 {
     public class CharacterNotFoundException : Exception
     {

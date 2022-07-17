@@ -1,27 +1,27 @@
-﻿using Assets.DiceGame.Combat.Entities.CombatActionAggregate;
-using Assets.DiceGame.Combat.Presentation.Animations.Kinds;
+﻿using DiceGame.Combat.Presentation.Animations.Kinds;
+using DiceGame.Combat.Entities.CharacterAggregate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets.DiceGame.Combat.Presentation.Animations
+namespace DiceGame.Combat.Presentation.Animations
 {
     public class CombatAnimatorComponent : MonoBehaviour
     {
         Queue<BaseAnimation> animations = new Queue<BaseAnimation>();
 
-        public void QueueAnimationForEnemyDecision(EnemyDecision decision, Transform sourceTransform, Transform targetTransform, Action callback)
+        public void QueueAnimationForEnemyDecision(CombatAction combatAction, Transform sourceTransform, Transform targetTransform, Action callback)
         {
-            switch (decision.Decision)
+            switch (combatAction)
             {
-                case EnemyDecisionType.Attack:
+                case AttackAction:
                     AddAttackAnimation(sourceTransform, targetTransform, callback);
                     break;
-                case EnemyDecisionType.Defence:
+                case ShieldAction:
                     AddDefenseAnimation(sourceTransform, targetTransform, callback);
                     break;
-                case EnemyDecisionType.Heal:
+                case HealAction:
                 default:
                     break;
             }

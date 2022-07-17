@@ -1,34 +1,53 @@
 using System.Collections.Generic;
 using System.Linq;
-using Assets.DiceGame.Combat.Entities.EnemyAggregate;
+using DiceGame.Combat.Entities.EnemyAggregate;
+using DiceGame.Combat.Events;
+using DiceGame.SharedKernel;
+using UnityEngine;
 
 namespace DiceGame.Combat.Entities.CharacterAggregate
 {
     public abstract class Character
     {
-        private int id;
-        private CharacterStats stats;
-        protected List<StatusEffect> activeStatusEffects;
+        protected int id;
+        protected ICharacterStats stats;
+        protected List<StatusEffect> activeStatusEffects = new List<StatusEffect>();
         protected int currentHealth;
         protected int currentArmor;
 
+        public Character(int id, ICharacterStats characterStats)
+        {
+            this.id = id;
+            stats = characterStats;
+            currentHealth = characterStats.MaxLife;
+        }
+
+        public int Id => id;
+        public int CurrentHealth => currentHealth;
+        public float MaxLife => stats.MaxLife;
+        public bool IsDead => currentHealth <= 0;
+
         private void TakeDamage(int amount)
         {
-            currentHealth -= amount;
-            // GameEvents.TakeDamage(id, amount);
+            currentHealth = Mathf.Clamp(0, stats.MaxLife, currentHealth - amount);
+            GameEvents.Raise(new CharacterTookDamageEvent(id, amount));
+
+            if (IsDead)
+            {
+                GameEvents.Raise(new CharacterKilledEvent(id));
+            }
         }
 
         private void TakeHeal(int amount)
         {
-            currentHealth += amount;
-            // GameEvents.Heal(id, amount);
+            currentHealth = Mathf.Clamp(0, stats.MaxLife, currentHealth + amount);
+            GameEvents.Raise(new CharacterGotHealedEvent(id, amount));
         }
 
         private void TakeShield(int amount)
         {
             currentArmor += amount;
-
-            // GameEvents.Shield(id, amount);
+            GameEvents.Raise(new CharacterGotShieldedEvent(id, amount));
         }
 
         private void TakeStatusEffects(IEnumerable<StatusEffect> statusEffects)
@@ -64,7 +83,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
         {
             heal = heal ?? new Heal(stats.Heal);
             heal = OnHealingPipeline(heal);
-            var action = new HealSelfAction(heal, id);
+            var action = new HealAction(heal, id, id);
 
             // GameEvents.SendHealAction(action);
         }
@@ -73,7 +92,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
         {
             shield = shield ?? new Shield(stats.Defence);
             shield = OnShieldingPipeline(shield);
-            var action = new ShieldSelfAction(shield, id);
+            var action = new ShieldAction(shield, id, id);
 
             // GameEvents.SendShieldAction(action);
         }
@@ -143,20 +162,39 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
         #endregion
 
         #region ReceiveActions
-        public void ReceiveAttack(Attack attack)
+
+        public void ReceiveAction(CombatAction combatAction)
+        {
+            switch (combatAction)
+            {
+                case AttackAction attackAction:
+                    ReceiveAttack(attackAction.Attack);
+                    break;
+                case HealAction healAction:
+                    ReceiveHealAction(healAction.Heal);
+                    break;
+                case ShieldAction shieldAction:
+                    ReceiveShieldAction(shieldAction.Shield);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        protected virtual void ReceiveAttack(Attack attack)
         {
             attack = OnReceiveAttackPipeline(attack);
             TakeStatusEffects(attack.StatusEffects);
             TakeDamage(attack.Amount);
         }
 
-        public void ReceiveHealAction(Heal heal)
+        protected virtual void ReceiveHealAction(Heal heal)
         {
             heal = OnReceiveHealingPipeline(heal);
             TakeHeal(heal.Amount);
         }
 
-        public void ReceiveShieldAction(Shield shield)
+        protected virtual void ReceiveShieldAction(Shield shield)
         {
             shield = OnReceiveShieldPipeline(shield);
             TakeShield(shield.Amount);

@@ -1,9 +1,9 @@
-﻿using Assets.DiceGame.Combat.Entities.EnemyAggregate;
-using Assets.DiceGame.Combat.Entities;
+﻿using DiceGame.Combat.Entities.EnemyAggregate;
+using DiceGame.Combat.Entities;
 using System.Collections.Generic;
-using Assets.DiceGame.Combat.Entities.CombatActionAggregate;
+using DiceGame.Combat.Entities.CombatActionAggregate;
 
-namespace Assets.DiceGame.Combat.Application
+namespace DiceGame.Combat.Application
 {
     public class EnemyPlayerAI
     {
@@ -16,14 +16,12 @@ namespace Assets.DiceGame.Combat.Application
             this.enemies = enemies;
         }
 
-        public IEnumerable<EnemyDecision> EnemiesTakeDecisions()
+        public void EnemiesTakeDecisions()
         {
-            var enemyDecisions = new List<EnemyDecision>();
             foreach (Enemy enemy in enemies)
             {
-                enemyDecisions.Add(enemy.TakeDecision(player, enemies));
+                enemy.TakeDecision(player, enemies);
             }
-            return enemyDecisions;
         }
     }
 }

@@ -1,43 +1,24 @@
-﻿using Assets.DiceGame.Combat.Entities.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿
+using DiceGame.Combat.Entities.EnemyAggregate;
+using DiceGame.Combat.Entities.CharacterAggregate;
 
-namespace Assets.DiceGame.Combat.Entities
+namespace DiceGame.Combat.Entities
 {
-    public class Player : ICharacter
+    public class Player : Character
     {
-        public const int Id = 0;
-        int ICharacter.Id => Id;
+        public const int PlayerId = 0;
 
-        public float MaxLife { get; private set; }
-        public float Life { get; private set; }
-        public float Attack { get; }
-
-        public Player(float maxLife, float attack)
+        public Player(ICharacterStats stats)
+            : base(PlayerId, stats)
         {
-            MaxLife = maxLife;
-            Attack = attack;
-            Life = maxLife;
         }
 
-        public void ResetLife()
+        public void TakeAction(Dice diceSelected, int targetId)
         {
-            Life = MaxLife;
-        }
-
-        public void Hit(float damages)
-        {
-            var newLife = Life - damages;
-            Life = Mathf.Clamp(0, MaxLife, newLife);
-        }
-
-        public bool IsDead()
-        {
-            return Life <= 0;
+            for (int i = 0; i < diceSelected.Value; i++)
+            {
+                TakeAttackAction(targetId);
+            }
         }
     }
 }

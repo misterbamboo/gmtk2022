@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.DiceGame.SharedKernel;
-using Assets.DiceGame.Turn.Events;
+using DiceGame.Combat.Entities;
+using DiceGame.SharedKernel;
+using DiceGame.Turn.Events;
+using DiceGame.UI;
 using DiceGame;
+using DiceGame.Combat.Entities.CharacterAggregate;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,7 +30,7 @@ public class UIHand : MonoBehaviour
     [SerializeField] private Image diceCover;
     [SerializeField] private float rollTime = 1f;
     [SerializeField] private float rollPerSeconds = 10f;
-    [SerializeField] private CombatManager combatManager;
+    [SerializeField] private TargetSelector targetSelector;
     private Hand hand;
 
     private int currentPlayerIndex;
@@ -145,14 +148,16 @@ public class UIHand : MonoBehaviour
 
     public bool CheckForValidTarget()
     {
-        return combatManager.HasTarget;
+        return targetSelector.HasFocusedTarget;
     }
 
     private void Select(int index)
     {
         var diceSelected = hand.SelectDice(index);
 
-        combatManager.HitTarget(diceSelected.Value);
+        var playerComponent = GameObject.FindWithTag(PlayerComponent.Tag).GetComponent<PlayerComponent>();
+        playerComponent.TakeDecision(diceSelected, targetSelector.FocusedTargetId);
+
         diceUsed++;
         if (diceUsed == 3 || hand.AvailableDice.Count() == 0)
         {

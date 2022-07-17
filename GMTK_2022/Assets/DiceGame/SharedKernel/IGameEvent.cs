@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.DiceGame.SharedKernel
+namespace DiceGame.SharedKernel
 {
     public interface IGameEvent
     {

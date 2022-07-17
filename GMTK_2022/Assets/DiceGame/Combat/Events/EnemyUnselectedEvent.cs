@@ -1,6 +1,6 @@
-﻿using Assets.DiceGame.SharedKernel;
+﻿using DiceGame.SharedKernel;
 
-namespace Assets.DiceGame.Combat.Events
+namespace DiceGame.Combat.Events
 {
     public class EnemyUnselectedEvent : IGameEvent
     {

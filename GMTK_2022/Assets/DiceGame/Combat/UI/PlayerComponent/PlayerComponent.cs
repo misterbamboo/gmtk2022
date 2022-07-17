@@ -1,22 +1,15 @@
-using Assets.DiceGame.Combat.Entities;
+using DiceGame.Combat.Entities;
+using DiceGame;
+using System;
 
-public class PlayerComponent : LivingComponent
+public class PlayerComponent : CharacterComponent
 {
     public const string LayerMaskName = "Player";
+    public const string Tag = "Player";
 
-    public Player Player { get; set; }
-
-    public override int GetCharacterID()
+    internal void TakeDecision(Dice diceSelected, int targetId)
     {
-        return Player == null ? -1 : Player.Id;
-    }
-
-    protected override void UpdateEnemyInfo()
-    {
-        if (Player != null)
-        {
-            life = Player.Life;
-            maxLife = Player.MaxLife;
-        }
+        var player = (Player)Character;
+        player.TakeAction(diceSelected, targetId);
     }
 }

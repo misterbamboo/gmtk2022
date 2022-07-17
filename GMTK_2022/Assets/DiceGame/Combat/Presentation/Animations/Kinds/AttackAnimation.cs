@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets.DiceGame.Combat.Presentation.Animations.Kinds
+namespace DiceGame.Combat.Presentation.Animations.Kinds
 {
     public class AttackAnimation : BaseAnimation
     {
