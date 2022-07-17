@@ -1,22 +1,45 @@
-﻿using Assets.DiceGame.Combat.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.DiceGame.SharedKernel
 {
-    public static class GameEvents
+    public class GameEvents : MonoBehaviour
     {
-        public static Dictionary<Type, List<Action<IGameEvent>>> subscribers = new();
+        public static GameEvents Instance { get; private set; }
 
         public static void Subscribe<T>(Action<T> subscriberAction)
            where T : IGameEvent
         {
-            Init<T>();
-            SubscribeByType<T>((e) => subscriberAction((T)e));
+            Instance.Init<T>();
+            Instance.SubscribeByType<T>((e) => subscriberAction((T)e));
         }
 
-        private static void Init<T>() where T : IGameEvent
+        public static void Raise<T>(T gameEvent)
+            where T : IGameEvent
+        {
+            Instance.pendingGameEvents.Enqueue(gameEvent);
+        }
+
+        public Dictionary<Type, List<Action<IGameEvent>>> subscribers = new();
+
+        public Queue<IGameEvent> pendingGameEvents = new Queue<IGameEvent>();
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+        private void Update()
+        {
+            if(pendingGameEvents.Count > 0)
+            {
+                var nextGameEvent = pendingGameEvents.Dequeue();
+                RaisePendingEvent(nextGameEvent);
+            }
+        }
+
+        private void Init<T>() where T : IGameEvent
         {
             var type = typeof(T);
             if (!subscribers.ContainsKey(type))
@@ -25,7 +48,7 @@ namespace Assets.DiceGame.SharedKernel
             }
         }
 
-        private static void SubscribeByType<T>(Action<IGameEvent> subscriberAction)
+        private void SubscribeByType<T>(Action<IGameEvent> subscriberAction)
             where T : IGameEvent
         {
             var type = typeof(T);
@@ -33,12 +56,11 @@ namespace Assets.DiceGame.SharedKernel
             list.Add(subscriberAction);
         }
 
-        public static void Raise<T>(T gameEvent)
-            where T : IGameEvent
+        private void RaisePendingEvent(IGameEvent gameEvent)
         {
-            var type = typeof(T);
             Debug.Log($"Raise: {gameEvent} ({Time.realtimeSinceStartup})");
 
+            var type = gameEvent.GetType();
             if (subscribers.ContainsKey(type))
             {
                 var list = subscribers[type];

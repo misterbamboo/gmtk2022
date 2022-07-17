@@ -1,6 +1,7 @@
 using Assets.DiceGame.Combat.Application;
 using Assets.DiceGame.Combat.Entities.EnemyAggregate;
 using Assets.DiceGame.Combat.Events;
+using Assets.DiceGame.Combat.Presentation.Animations;
 using Assets.DiceGame.Combat.Presentation.Exceptions;
 using Assets.DiceGame.Combat.Presentation.Inspector;
 using Assets.DiceGame.SharedKernel;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(CombatAnimatorComponent))]
 public class CombatManager : MonoBehaviour
 {
     public const string Tag = "CombatManager";
@@ -32,18 +34,50 @@ public class CombatManager : MonoBehaviour
 
     private CombatController combatController;
 
+    private CombatAnimatorComponent combatAnimator;
+
     void Start()
     {
         var enemyStatsPerType = statsManager.GetEnemyStats();
 
+        combatAnimator = GetComponent<CombatAnimatorComponent>();
         combatController = new CombatController(minNumberOfEnemies, maxNumberOfEnemies, enemyStatsPerType, playerPrefab.maxLife);
+        SubscribeEvents();
+        combatController.NewCombat();
+    }
+
+    private void SubscribeEvents()
+    {
         GameEvents.Subscribe<NewCombatReadyEvent>(EventsReceiver);
         GameEvents.Subscribe<EnemySelectedEvent>(EventsReceiver);
         GameEvents.Subscribe<EnemyUnselectedEvent>(EventsReceiver);
         GameEvents.Subscribe<EnemyTakeDamageEvent>(EventsReceiver);
         GameEvents.Subscribe<EnemyKilledEvent>(EventsReceiver);
         GameEvents.Subscribe<TurnStartedEvent>((e) => combatController.OnTurnStarted(e));
-        combatController.NewCombat();
+        GameEvents.Subscribe<EnemyDecisionTakenEvent>(OnEnemyDecisionTaken);
+    }
+
+    private void OnEnemyDecisionTaken(EnemyDecisionTakenEvent enemyDecisionTakenEvent)
+    {
+        var sourceTransform = FindCharacterTransform(enemyDecisionTakenEvent.EnemyDecision.SourceId);
+        var targetTransform = FindCharacterTransform(enemyDecisionTakenEvent.EnemyDecision.TargetId);
+        combatAnimator.QueueAnimationForEnemyDecision(enemyDecisionTakenEvent.EnemyDecision.Decision, sourceTransform, targetTransform);
+    }
+
+    private Transform FindCharacterTransform(int characterId)
+    {
+        var souceEnemy = enemiesComponents.FirstOrDefault(c => c.GetCharacterID() == characterId);
+        if (souceEnemy != null)
+        {
+            return souceEnemy.transform;
+        }
+
+        if(playerComponent.GetCharacterID() == characterId)
+        {
+            return playerComponent.transform;
+        }
+
+        throw new CharacterTransformNotFound(characterId);
     }
 
     private void Update()

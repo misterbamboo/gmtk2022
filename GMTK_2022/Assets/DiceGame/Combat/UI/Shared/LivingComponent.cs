@@ -57,6 +57,8 @@ public abstract class LivingComponent : MonoBehaviour
 
     protected abstract void UpdateEnemyInfo();
 
+    public abstract int GetCharacterID();
+
     private void UpdateLifeRatio()
     {
         lifeRatioChanges.Reset(life, maxLife);

@@ -16,13 +16,14 @@ namespace Assets.DiceGame.Combat.Application
             this.enemies = enemies;
         }
 
-        public void EnemiesTakeActions()
+        public IEnumerable<EnemyDecision> EnemiesTakeDecisions()
         {
-            var actions = new List<EnemyDecision>();
+            var enemyDecisions = new List<EnemyDecision>();
             foreach (Enemy enemy in enemies)
             {
-                actions.Add(enemy.TakeDecision(player, enemies));
+                enemyDecisions.Add(enemy.TakeDecision(player, enemies));
             }
+            return enemyDecisions;
         }
     }
 }
