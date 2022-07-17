@@ -43,11 +43,7 @@ namespace DiceGame.Combat.Application
             for (int i = 0; i < count; i++)
             {
                 var enemyTypeIndex = UnityEngine.Random.Range(0, enemyTypeValues.Length);
-
-                // TEMP
-                // var enemyType = (EnemyType)enemyTypeValues.GetValue(enemyTypeIndex);
-                var enemyType = EnemyType.ChessKing;
-
+                var enemyType = (EnemyType)enemyTypeValues.GetValue(enemyTypeIndex);
                 var enemyStats = GetEnemyStatsFromType(enemyType);
 
                 Enemies.Add(new Enemy(enemyType, enemyStats));
