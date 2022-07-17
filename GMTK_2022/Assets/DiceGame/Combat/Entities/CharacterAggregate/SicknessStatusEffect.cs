@@ -13,6 +13,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
 
         public override Attack OnAttacking(Attack attack)
         {
+            Duration--;
             return new Attack(attack.Amount / 2, attack.StatusEffects);
         }
     }

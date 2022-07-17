@@ -13,7 +13,8 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
 
         public override void OnTurnEnd()
         {
-            target.TakeDamage(duration);
+            target.TakeDamage(Duration);
+            Duration--;
         }
     }
 }

@@ -9,12 +9,13 @@ public abstract class StatusEffect
     protected Character source;
     protected Character target;
 
-    public int duration { get; protected set; }
-    public bool IsExpired => duration <= 0;
+    public int Duration { get; protected set; }
+    public bool IsExpired => Duration <= 0;
 
     public StatusEffect(Character source, int duration)
     {
         this.source = source;
+        Duration = duration;
     }
 
     public void Apply(Character target)
@@ -24,7 +25,7 @@ public abstract class StatusEffect
 
     public void Refresh(int newDuration)
     {
-        duration += newDuration;
+        Duration += newDuration;
     }
 
     public virtual Attack OnAttacking(Attack attack)

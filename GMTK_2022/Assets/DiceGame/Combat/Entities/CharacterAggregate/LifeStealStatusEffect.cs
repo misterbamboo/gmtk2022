@@ -14,6 +14,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
         public override void OnReceiveDamage(int amount)
         {
             source.TakeHeal(amount);
+            Duration--;
         }
     }
 }

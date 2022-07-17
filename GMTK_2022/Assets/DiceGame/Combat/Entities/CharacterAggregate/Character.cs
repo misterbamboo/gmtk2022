@@ -27,6 +27,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
         public int CurrentArmor => currentArmor;
         public float MaxLife => stats.MaxLife;
         public bool IsDead => currentHealth <= 0;
+        public IEnumerable<StatusEffect> ActiveStatusEffects => activeStatusEffects;
         public ICharacterStats Stats => stats;
 
         public void TakeDamage(int amount)
@@ -76,7 +77,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
                 if (activeStatusEffects.Any(se => se.GetType() == statusEffect.GetType()))
                 {
                     var se = activeStatusEffects.First(se => se.GetType() == statusEffect.GetType());
-                    se.Refresh(statusEffect.duration);
+                    se.Refresh(statusEffect.Duration);
                 }
                 else
                 {
@@ -84,7 +85,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
                     activeStatusEffects.Add(statusEffect);
                 }
 
-                // GameEvents.ReceiveStatusStatusEffect(id, statusEffect);
+                GameEvents.Raise<CharacterReceivedStatusEffectEvent>(new CharacterReceivedStatusEffectEvent(id, statusEffect.GetType()));
             }
         }
 
@@ -127,6 +128,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
             {
                 attack = statusEffect.OnAttacking(attack);
             }
+            RemoveExpiredStatusEffects();
 
             return attack;
         }
@@ -137,6 +139,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
             {
                 attack = statusEffect.OnReceiveAttack(attack);
             }
+            RemoveExpiredStatusEffects();
 
             return attack;
         }
@@ -147,6 +150,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
             {
                 heal = statusEffect.OnHealing(heal);
             }
+            RemoveExpiredStatusEffects();
 
             return heal;
         }
@@ -157,6 +161,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
             {
                 heal = statusEffect.OnHealing(heal);
             }
+            RemoveExpiredStatusEffects();
 
             return heal;
         }
@@ -167,6 +172,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
             {
                 shield = statusEffect.OnShielding(shield);
             }
+            RemoveExpiredStatusEffects();
 
             return shield;
         }
@@ -177,6 +183,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
             {
                 shield = statusEffect.OnReceiveShield(shield);
             }
+            RemoveExpiredStatusEffects();
 
             return shield;
         }
@@ -187,6 +194,7 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
             {
                 statusEffect.OnReceiveDamage(amount);
             }
+            RemoveExpiredStatusEffects();
         }
 
         #endregion
@@ -213,10 +221,22 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
 
         protected virtual void ReceiveAttack(Attack attack)
         {
-            attack = OnReceiveAttackPipeline(attack);
+            if (attack.Amount != 0)
+            {
+                attack = OnReceiveAttackPipeline(attack);
+            }
+
+            if (attack.StatusEffects.Any())
+            {
+                TakeStatusEffects(attack.StatusEffects);
+            }
+
+            if (attack.Amount != 0)
+            {
+                TakeDamage(attack.Amount);
+            }
+
             RemoveExpiredStatusEffects();
-            TakeStatusEffects(attack.StatusEffects);
-            TakeDamage(attack.Amount);
         }
 
         protected virtual void ReceiveHealAction(Heal heal)
@@ -239,6 +259,8 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
             {
                 GameEvents.Raise<StatusEffectExpiredEvent>(new StatusEffectExpiredEvent(id, item.GetType()));
             }
+
+            activeStatusEffects.RemoveAll(se => se.IsExpired);
         }
 
         #endregion
