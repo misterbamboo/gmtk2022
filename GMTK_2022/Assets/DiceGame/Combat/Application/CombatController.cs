@@ -43,7 +43,11 @@ namespace DiceGame.Combat.Application
             for (int i = 0; i < count; i++)
             {
                 var enemyTypeIndex = UnityEngine.Random.Range(0, enemyTypeValues.Length);
-                var enemyType = (EnemyType)enemyTypeValues.GetValue(enemyTypeIndex);
+
+                // TEMP
+                // var enemyType = (EnemyType)enemyTypeValues.GetValue(enemyTypeIndex);
+                var enemyType = EnemyType.ChessKing;
+
                 var enemyStats = GetEnemyStatsFromType(enemyType);
 
                 Enemies.Add(new Enemy(enemyType, enemyStats));
@@ -90,7 +94,7 @@ namespace DiceGame.Combat.Application
 
         public void CheckWinningCondition()
         {
-            if (Enemies.All(e=>e.IsDead) || !Enemies.Any())
+            if (Enemies.All(e => e.IsDead) || !Enemies.Any())
             {
                 CombatFinished = true;
                 GameEvents.Raise(new CombatEndedEvent(playerWon: true));

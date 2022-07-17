@@ -12,6 +12,7 @@ using System.Linq;
 using UnityEngine;
 using System.Collections;
 using DiceGame.Assets.DiceGame.DecisionScreen.Events;
+using DiceGame.Assets.DiceGame.Screens.MainMenuScreen.Events;
 
 [RequireComponent(typeof(CombatAnimatorComponent))]
 public class CombatManager : MonoBehaviour
@@ -43,11 +44,11 @@ public class CombatManager : MonoBehaviour
     {
         combatAnimator = GetComponent<CombatAnimatorComponent>();
         SubscribeEvents();
-        StartNewCombat();
     }
 
     private void SubscribeEvents()
     {
+        GameEvents.Subscribe<NewGameRequestedEvent>(OnNewGameRequested);
         GameEvents.Subscribe<DecisionCompletedEvent>(OnDecisionCompleted);
 
         GameEvents.Subscribe<TurnStartedEvent>(OnTurnStarted);
@@ -59,6 +60,11 @@ public class CombatManager : MonoBehaviour
         GameEvents.Subscribe<CharacterTookDamageEvent>(TakeDamageAnimation);
         GameEvents.Subscribe<CharacterGotHealedEvent>(EventsReceiver);
         GameEvents.Subscribe<CharacterGotShieldedEvent>(EventsReceiver);
+    }
+
+    private void OnNewGameRequested(NewGameRequestedEvent obj)
+    {
+        StartNewCombat();
     }
 
     private void OnDecisionCompleted(DecisionCompletedEvent decisionCompletedEvent)

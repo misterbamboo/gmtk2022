@@ -3,7 +3,6 @@ using DiceGame.Combat.Events;
 using DiceGame.SharedKernel;
 using DiceGame.Turn.Application;
 using DiceGame.Turn.Events;
-using System;
 using UnityEngine;
 
 namespace DiceGame.Turn.Presentation
@@ -17,19 +16,20 @@ namespace DiceGame.Turn.Presentation
 
         private void Start()
         {
-            GameEvents.Subscribe<TurnEndedEvent>(OnTurnEnded);
+            GameEvents.Subscribe<CombatStartedEvent>(OnCombatStarted);
             GameEvents.Subscribe<CombatEndedEvent>(OnCombatEnded);
+            GameEvents.Subscribe<TurnEndedEvent>(OnTurnEnded);
             GameEvents.Subscribe<DecisionCompletedEvent>(OnDecisionCompleted);
         }
 
-
-
-        private void Update()
+        private void OnCombatStarted(CombatStartedEvent obj)
         {
-            if (turnController == null)
-            {
-                StartNewTurns();
-            }
+            StartNewCombatTurns();
+        }
+
+        private void OnCombatEnded(CombatEndedEvent obj)
+        {
+            combatEnded = true;
         }
 
         private void OnTurnEnded(TurnEndedEvent turnEndedEvent)
@@ -40,17 +40,12 @@ namespace DiceGame.Turn.Presentation
             }
         }
 
-        private void OnCombatEnded(CombatEndedEvent obj)
-        {
-            combatEnded = true;
-        }
-
         private void OnDecisionCompleted(DecisionCompletedEvent obj)
         {
-            StartNewTurns();
+            StartNewCombatTurns();
         }
 
-        private void StartNewTurns()
+        private void StartNewCombatTurns()
         {
             combatEnded = false;
             turnController = new TurnController(numberOfPlayers);
