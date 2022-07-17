@@ -221,20 +221,9 @@ namespace DiceGame.Combat.Entities.CharacterAggregate
 
         protected virtual void ReceiveAttack(Attack attack)
         {
-            if (attack.Amount != 0)
-            {
-                attack = OnReceiveAttackPipeline(attack);
-            }
-
-            if (attack.StatusEffects.Any())
-            {
-                TakeStatusEffects(attack.StatusEffects);
-            }
-
-            if (attack.Amount != 0)
-            {
-                TakeDamage(attack.Amount);
-            }
+            attack = OnReceiveAttackPipeline(attack);
+            TakeStatusEffects(attack.StatusEffects);
+            TakeDamage(attack.Amount);
 
             RemoveExpiredStatusEffects();
         }

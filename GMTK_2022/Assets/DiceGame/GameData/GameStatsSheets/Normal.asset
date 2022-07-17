@@ -54,6 +54,6 @@ MonoBehaviour:
   - statKey: king_heal
     value: 2
   - statKey: battle_min_ennemies
-    value: 1
+    value: 4
   - statKey: battle_max_ennemies
-    value: 2
+    value: 4
