@@ -6,6 +6,11 @@ public class PlayerComponent : LivingComponent
 
     public Player Player { get; set; }
 
+    public override int GetCharacterID()
+    {
+        return Player == null ? -1 : Player.Id;
+    }
+
     protected override void UpdateEnemyInfo()
     {
         if (Player != null)

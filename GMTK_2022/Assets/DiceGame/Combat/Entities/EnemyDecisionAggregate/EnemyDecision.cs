@@ -3,9 +3,9 @@ namespace Assets.DiceGame.Combat.Entities.CombatActionAggregate
 {
     public class EnemyDecision
     {
-        private EnemyDecisionType Decision { get; }
-        private int SourceId { get; }
-        private int TargetId { get; }
+        public EnemyDecisionType Decision { get; }
+        public int SourceId { get; }
+        public int TargetId { get; }
 
         public EnemyDecision(EnemyDecisionType action, int sourceId, int targetId)
         {

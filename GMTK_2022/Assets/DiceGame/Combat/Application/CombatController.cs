@@ -5,8 +5,8 @@ using Assets.DiceGame.SharedKernel;
 using Assets.DiceGame.Turn.Events;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Assets.DiceGame.Combat.Application.Exceptions;
+using Assets.DiceGame.Combat.Entities.CombatActionAggregate;
 
 namespace Assets.DiceGame.Combat.Application
 {
@@ -24,6 +24,7 @@ namespace Assets.DiceGame.Combat.Application
         private readonly IDictionary<EnemyType, ICharacterStats> enemyStatsPerType;
 
         private Enemy focusedEnemy;
+        private List<EnemyDecision> pendingEnemyDecisions = new List<EnemyDecision>();
 
         public CombatController(int minNumberOfEnnemies, int maxNumberOfEnemies, IDictionary<EnemyType, ICharacterStats> enemyStatsPerType, float playerDefaultLife)
         {
@@ -110,7 +111,11 @@ namespace Assets.DiceGame.Combat.Application
         {
             if (e.IsEnemyPlayerTurn())
             {
-                enemyPlayerAI.EnemiesTakeActions();
+                foreach (var enemyDecision in enemyPlayerAI.EnemiesTakeDecisions())
+                {
+                    pendingEnemyDecisions.Add(enemyDecision);
+                    GameEvents.Raise(new EnemyDecisionTakenEvent(enemyDecision));
+                }
             }
         }
     }
