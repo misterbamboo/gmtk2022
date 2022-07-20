@@ -1,5 +1,6 @@
 using System;
 using DiceGame;
+using DiceGame.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ public class UIDice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     [SerializeField] private Image hoverGlow;
     [SerializeField] private Image discardGlow;
     [SerializeField] private Image icon;
+    private TargetSelector targetSelector;
     private RectTransform canvasRectTransform;
     private UIHand hand;
     private int index = 0;
@@ -22,6 +24,7 @@ public class UIDice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         hoverGlow.enabled = false;
         discardGlow.enabled = false;
         canvasRectTransform = GameObject.Find("Canvas").GetComponent<RectTransform>();
+        targetSelector = GameObject.FindWithTag("TargetSelector").GetComponent<TargetSelector>();
     }
 
     public void Init(int index, Dice dice, UIHand hand)
@@ -37,6 +40,7 @@ public class UIDice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        print("swag");
         hoverGlow.enabled = true;
         hand.HoverDiceEnter(index);
     }
@@ -45,6 +49,7 @@ public class UIDice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     {
         if (!inHand) return;
 
+        print("no swag");
         hoverGlow.enabled = false;
         hand.HoverDiceExit(index);
     }
@@ -62,6 +67,7 @@ public class UIDice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     public void OnBeginDrag(PointerEventData eventData)
     {
         transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        hoverGlow.enabled = false;
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -78,8 +84,22 @@ public class UIDice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     public void OnDrag(PointerEventData eventData)
     {
         if (!inHand) return;
+        GlowIfOverTarget();
 
-        rectTransform.anchoredPosition += eventData.delta / canvasRectTransform.localScale.x;
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(canvasRectTransform, eventData.position, eventData.pressEventCamera, out Vector3 worldPoint);
+        transform.position = worldPoint;
+    }
+
+    private void GlowIfOverTarget()
+    {
+        if (targetSelector.HasFocusedTarget)
+        {
+            hoverGlow.enabled = true;
+        }
+        else
+        {
+            hoverGlow.enabled = false;
+        }
     }
 
     public void FakeRoll()
