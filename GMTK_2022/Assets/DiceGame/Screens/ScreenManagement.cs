@@ -9,12 +9,12 @@ namespace DiceGame
     public class ScreenManagement : MonoBehaviour
     {
         [SerializeField] GameObject mainMenuScreen;
-        [SerializeField] GameObject canvas;
+        [SerializeField] GameObject uiHand;
 
         private void Awake()
         {
             mainMenuScreen.SetActive(true);
-            canvas.SetActive(false);
+            uiHand.SetActive(false);
         }
 
         private void Start()
@@ -26,13 +26,13 @@ namespace DiceGame
         private void OnNewGameRequested(NewGameRequestedEvent obj)
         {
             mainMenuScreen.SetActive(false);
-            canvas.SetActive(true);
+            uiHand.SetActive(true);
         }
 
         private void OnMainMenuRequested(MainMenuRequestedEvent obj)
         {
             mainMenuScreen.SetActive(true);
-            canvas.SetActive(false);
+            uiHand.SetActive(false);
         }
     }
 }

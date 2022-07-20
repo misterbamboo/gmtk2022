@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Roll \nHand"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2cc70021dca4c5e4aa358f8265d7cbc3, type: 2}
+  m_sharedMaterial: {fileID: -979846055859264976, guid: 2cc70021dca4c5e4aa358f8265d7cbc3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -93,8 +93,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 16
+  m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
@@ -203,8 +203,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: End Turn
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2cc70021dca4c5e4aa358f8265d7cbc3, type: 2}
+  m_sharedMaterial: {fileID: -979846055859264976, guid: 2cc70021dca4c5e4aa358f8265d7cbc3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -228,8 +228,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -305,8 +305,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 10, y: -70}
-  m_SizeDelta: {x: 600, y: 100}
+  m_AnchoredPosition: {x: 5, y: -45}
+  m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &193719455256097333
 CanvasRenderer:
@@ -336,7 +336,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 06839a9e285134212915dda98b0834fa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4dd70ec2220ae427b9b92a2d02dca9f0, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -382,8 +382,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 10, y: -70}
-  m_SizeDelta: {x: 600, y: 100}
+  m_AnchoredPosition: {x: 5, y: -45}
+  m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &3845722722661873881
 CanvasRenderer:
@@ -413,7 +413,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b897eba05647b4a619d0332523726187, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a0f69d62aae214b8785db39c8332199c, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -436,15 +436,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 10
-    m_Right: 10
-    m_Top: 10
-    m_Bottom: 10
+    m_Left: 5
+    m_Right: 5
+    m_Top: 5
+    m_Bottom: 5
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 80, y: 80}
-  m_Spacing: {x: 20, y: 0}
+  m_CellSize: {x: 40, y: 40}
+  m_Spacing: {x: 10, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &3845722722818661330
@@ -510,6 +510,8 @@ MonoBehaviour:
   diceCover: {fileID: 3144149431219217820}
   rollTime: 1
   rollPerSeconds: 10
+  targetSelector: {fileID: 0}
+  dicebag: {fileID: 0}
 --- !u!1 &3845722723201542691
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,8 +548,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 10, y: -10}
-  m_SizeDelta: {x: 250, y: 50}
+  m_AnchoredPosition: {x: 5, y: -5}
+  m_SizeDelta: {x: 125, y: 35}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &3845722723201542703
 CanvasRenderer:
@@ -577,7 +579,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b897eba05647b4a619d0332523726187, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a0f69d62aae214b8785db39c8332199c, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -600,15 +602,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 10
-    m_Right: 10
-    m_Top: 5
-    m_Bottom: 5
+    m_Left: 5
+    m_Right: 5
+    m_Top: 3
+    m_Bottom: 3
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 35, y: 35}
-  m_Spacing: {x: 10, y: 0}
+  m_CellSize: {x: 16, y: 16}
+  m_Spacing: {x: 5, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &5603501823407827680
@@ -648,8 +650,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 10, y: -180}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 5, y: -100}
+  m_SizeDelta: {x: 80, y: 15}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &3706492419060931219
 CanvasRenderer:
@@ -782,8 +784,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 620, y: -70}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 310, y: -45}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &1132362230945630126
 CanvasRenderer:

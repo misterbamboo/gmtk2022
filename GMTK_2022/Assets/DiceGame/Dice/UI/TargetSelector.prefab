@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2052866623141467617}
   m_Layer: 0
   m_Name: TargetSelector
-  m_TagString: Untagged
+  m_TagString: TargetSelector
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -6,6 +6,7 @@ namespace DiceGame.UI
 {
     public class TargetSelector : MonoBehaviour
     {
+        public const string Tag = "TargetSelector";
         private void Update()
         {
             UpdateTarget();
