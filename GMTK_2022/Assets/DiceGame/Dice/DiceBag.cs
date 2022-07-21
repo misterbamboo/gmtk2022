@@ -9,6 +9,8 @@ namespace DiceGame
         private List<Dice> dices = new List<Dice>();
         private int currentDiceIndex = 0;
 
+        public int TotalCount => dices.Count;
+
         public DiceBag(IEnumerable<Dice> dices)
         {
             this.dices = dices.ToList();

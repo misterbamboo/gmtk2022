@@ -114,6 +114,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverSpeed: 4
+  onLeftClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  onDownClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  onUpClicked:
+    m_PersistentCalls:
+      m_Calls: []
   leftArrow: {fileID: 1950698746647500708}
   rightArrow: {fileID: 1950698746584323969}
   upArrow: {fileID: 1950698747192394092}

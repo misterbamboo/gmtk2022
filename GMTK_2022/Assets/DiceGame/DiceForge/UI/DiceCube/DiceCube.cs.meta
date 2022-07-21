@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: ab993d0b9609b5d41addea5445c74247
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - frontFace: {instanceID: 0}
+  - topFace: {instanceID: 0}
+  - rightFace: {instanceID: 0}
+  - leftFace: {instanceID: 0}
+  - bottomFace: {instanceID: 0}
+  - backFace: {instanceID: 0}
+  - faceMaterial: {fileID: 2100000, guid: 8758b1067fae54249ac703e08254a370, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

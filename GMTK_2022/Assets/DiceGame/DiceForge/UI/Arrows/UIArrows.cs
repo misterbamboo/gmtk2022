@@ -10,6 +10,7 @@ namespace DiceGame
         public const string LayerMaskName = "UIArrows";
 
         [SerializeField] float hoverSpeed = 2;
+        [SerializeField] float growScale = 1.25f;
 
         [SerializeField] UnityEvent onLeftClicked;
         [SerializeField] UnityEvent onRightClicked;
@@ -84,7 +85,7 @@ namespace DiceGame
                     animationTimes[animationTimeKey] -= Time.deltaTime * hoverSpeed;
                 }
 
-                ScaleArrow(animationTimeKey, Vector2.one, Vector2.one * 1.5f);
+                ScaleArrow(animationTimeKey, Vector2.one, Vector2.one * growScale);
             }
         }
 
