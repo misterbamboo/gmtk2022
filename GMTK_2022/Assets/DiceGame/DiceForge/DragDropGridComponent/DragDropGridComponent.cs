@@ -10,10 +10,14 @@ namespace DiceGame
         [SerializeField] public UnityEvent<DragDropGridComponent, int, Vector2> onDrag;
         [SerializeField] public UnityEvent<DragDropGridComponent, int, Vector2> onDrop;
 
+        [Header("Without follow")]
         [SerializeField] float spawnzoneHeightPx = 125;
         [SerializeField] float spawnzoneSidePaddingPx = 25;
         [SerializeField] float spawnzoneBottomPaddingPx = 25;
         [SerializeField] float spawnzoneGridSizePx = 25;
+
+        [Header("With follow")]
+        [SerializeField] Transform followObject;
 
         DragDropGridComponentGizmos gizmos = new DragDropGridComponentGizmos();
 
@@ -61,6 +65,11 @@ namespace DiceGame
             var spawnPos = Camera.main.ScreenToWorldPoint(new Vector2(spawnzoneSidePaddingPx, spawnzoneBottomPaddingPx));
             var spanwSizePos = Camera.main.ScreenToWorldPoint(new Vector2(Camera.main.pixelWidth - spawnzoneSidePaddingPx, spawnzoneBottomPaddingPx + spawnzoneHeightPx));
             var spawnSize = spanwSizePos - spawnPos;
+
+            if (followObject != null)
+            {
+                return new Rect(followObject.position - spawnSize / 2, spawnSize);
+            }
             return new Rect(spawnPos, spawnSize);
         }
 

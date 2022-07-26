@@ -889,6 +889,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4816746203651328208, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
+      propertyPath: followObject
+      value: 
+      objectReference: {fileID: 1441205724}
+    - target: {fileID: 4816746203651328208, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
+      propertyPath: spawnzoneHeightPx
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 4816746203651328208, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
+      propertyPath: spawnzoneGridSizePx
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4816746203651328208, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
+      propertyPath: spawnzoneSidePaddingPx
+      value: 260
+      objectReference: {fileID: 0}
+    - target: {fileID: 4816746203651328208, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
+      propertyPath: spawnzoneBottomPaddingPx
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8435917041819479890, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
       propertyPath: m_Name
       value: TargetDiceZone
@@ -1118,6 +1138,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 225590698966128857, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4816746203651328208, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
+      propertyPath: followObject
+      value: 
+      objectReference: {fileID: 1059114354}
+    - target: {fileID: 4816746203651328208, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
+      propertyPath: spawnzoneHeightPx
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 4816746203651328208, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
+      propertyPath: spawnzoneGridSizePx
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 4816746203651328208, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
+      propertyPath: spawnzoneSidePaddingPx
+      value: 260
+      objectReference: {fileID: 0}
+    - target: {fileID: 4816746203651328208, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
+      propertyPath: spawnzoneBottomPaddingPx
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8435917041819479890, guid: fd3347298e0c31940b294b0e39d00a45, type: 3}
