@@ -152,6 +152,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 965590149}
+  - {fileID: 2086353069}
+  - {fileID: 2145163254}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -186,7 +188,7 @@ Transform:
   - {fileID: 1059114354}
   - {fileID: 1441205724}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &738466800
 PrefabInstance:
@@ -615,7 +617,7 @@ Transform:
   - {fileID: 225590700382715998}
   - {fileID: 225590700237766051}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1023815753
 MonoBehaviour:
@@ -629,9 +631,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cbd353a26b60654a8e2e631140986b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  diceBagZone: {fileID: 2875607789746904256}
-  sourceDiceZone: {fileID: 8435917043091634134}
-  targetDiceZone: {fileID: 8435917043233966633}
+  bagZone: {fileID: 2875607789746904256}
+  sourceZone: {fileID: 8435917043091634134}
+  targetZone: {fileID: 8435917043233966633}
 --- !u!1001 &1053256942
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -980,38 +982,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1950698746447636282, guid: 3ff06b3444478bc4cb3a7e374680d6d8, type: 3}
   m_PrefabInstance: {fileID: 1441205723}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1838546770
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+--- !u!114 &1446595472 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1950698746447636229, guid: 3ff06b3444478bc4cb3a7e374680d6d8, type: 3}
+  m_PrefabInstance: {fileID: 1053256942}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1838546771}
-  m_Layer: 0
-  m_Name: Loading
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1838546771
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79f1319bcd18206458381ace96c70ca8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1661886516 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1950698746447636229, guid: 3ff06b3444478bc4cb3a7e374680d6d8, type: 3}
+  m_PrefabInstance: {fileID: 1441205723}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1838546770}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2086353069}
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79f1319bcd18206458381ace96c70ca8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2064440299
 GameObject:
   m_ObjectHideFlags: 0
@@ -1130,13 +1122,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2086353068}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1838546771}
-  m_RootOrder: 0
+  m_Father: {fileID: 567927587}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2086353070
 MonoBehaviour:
@@ -1152,6 +1144,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   diceCubePrefab: {fileID: 1052603279018947523, guid: d24337073d0a81e45b99e1447cf63220, type: 3}
   diceBagGridComponent: {fileID: 2875607789746904256}
+--- !u!1 &2145163253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2145163254}
+  - component: {fileID: 2145163255}
+  m_Layer: 0
+  m_Name: DiceForgeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2145163254
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2145163253}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 567927587}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2145163255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2145163253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0411e92c94722f94b893cabe50a0bb5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dragDropZonesManager: {fileID: 1023815753}
+  leftArrows: {fileID: 1446595472}
+  rightArrows: {fileID: 1661886516}
 --- !u!4 &225590700237766051
 Transform:
   m_ObjectHideFlags: 0

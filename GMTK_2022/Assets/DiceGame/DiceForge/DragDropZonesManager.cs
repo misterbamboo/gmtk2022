@@ -1,12 +1,17 @@
+using System;
 using UnityEngine;
 
 namespace DiceGame
 {
     public class DragDropZonesManager : MonoBehaviour
     {
-        [SerializeField] DragDropBaseComponent diceBagZone;
-        [SerializeField] DragDropBaseComponent sourceDiceZone;
-        [SerializeField] DragDropBaseComponent targetDiceZone;
+        public event Action<Transform> OnSourceChanged;
+        public event Action<Transform> OnTargetChanged;
+
+        [SerializeField] DragDropBaseComponent bagZone;
+        [SerializeField] DragDropBaseComponent sourceZone;
+        [SerializeField] DragDropBaseComponent targetZone;
+
         private int dragKey;
         private DragDropBaseComponent dragFrom;
         private Transform dragTransform;
@@ -14,12 +19,12 @@ namespace DiceGame
 
         private void Start()
         {
-            diceBagZone.onDrag.AddListener(OnDrag);
-            diceBagZone.onDrop.AddListener(OnDrop);
-            sourceDiceZone.onDrag.AddListener(OnDrag);
-            sourceDiceZone.onDrop.AddListener(OnDrop);
-            targetDiceZone.onDrag.AddListener(OnDrag);
-            targetDiceZone.onDrop.AddListener(OnDrop);
+            bagZone.onDrag.AddListener(OnDrag);
+            bagZone.onDrop.AddListener(OnDrop);
+            sourceZone.onDrag.AddListener(OnDrag);
+            sourceZone.onDrop.AddListener(OnDrop);
+            targetZone.onDrag.AddListener(OnDrag);
+            targetZone.onDrop.AddListener(OnDrop);
         }
 
         private void Update()
@@ -50,6 +55,8 @@ namespace DiceGame
             dragFrom = component;
             dragTransform = component.DragObjectByKey(objectKey);
             dragTransform.SetParent(null);
+
+            RaiseTransformChanged(component, null);
         }
 
         private void OnDrop(DragDropBaseComponent component, int objectKey, Vector2 dropPos)
@@ -64,9 +71,25 @@ namespace DiceGame
         {
             if (component.TryDropObjectByKey(key, dragTransform))
             {
+                var dropTransform = dragTransform;
+
                 dragKey = 0;
                 dragFrom = null;
                 dragTransform = null;
+
+                RaiseTransformChanged(component, dropTransform);
+            }
+        }
+
+        private void RaiseTransformChanged(DragDropBaseComponent component, Transform transform)
+        {
+            if (component == sourceZone)
+            {
+                OnSourceChanged?.Invoke(transform);
+            }
+            if (component == targetZone)
+            {
+                OnTargetChanged?.Invoke(transform);
             }
         }
     }

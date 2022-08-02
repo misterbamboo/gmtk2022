@@ -12,10 +12,10 @@ namespace DiceGame
         [SerializeField] float hoverSpeed = 2;
         [SerializeField] float growScale = 1.25f;
 
-        [SerializeField] UnityEvent onLeftClicked;
-        [SerializeField] UnityEvent onRightClicked;
-        [SerializeField] UnityEvent onDownClicked;
-        [SerializeField] UnityEvent onUpClicked;
+        [SerializeField] public UnityEvent onLeftClicked;
+        [SerializeField] public UnityEvent onRightClicked;
+        [SerializeField] public UnityEvent onDownClicked;
+        [SerializeField] public UnityEvent onUpClicked;
 
         [SerializeField] Transform leftArrow;
         [SerializeField] Transform rightArrow;
