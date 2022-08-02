@@ -4,11 +4,11 @@ namespace DiceGame
 {
     public class DragDropZonesManager : MonoBehaviour
     {
-        [SerializeField] DragDropGridComponent diceBagZone;
-        [SerializeField] DragDropGridComponent sourceDiceZone;
-        [SerializeField] DragDropGridComponent targetDiceZone;
+        [SerializeField] DragDropBaseComponent diceBagZone;
+        [SerializeField] DragDropBaseComponent sourceDiceZone;
+        [SerializeField] DragDropBaseComponent targetDiceZone;
         private int dragKey;
-        private DragDropGridComponent dragFrom;
+        private DragDropBaseComponent dragFrom;
         private Transform dragTransform;
         private bool dropNextFrame;
 
@@ -44,16 +44,15 @@ namespace DiceGame
             }
         }
 
-        private void OnDrag(DragDropGridComponent component, int objectKey, Vector2 dragPos)
+        private void OnDrag(DragDropBaseComponent component, int objectKey, Vector2 dragPos)
         {
             dragKey = objectKey;
             dragFrom = component;
             dragTransform = component.DragObjectByKey(objectKey);
             dragTransform.SetParent(null);
-            print("Drag: " + objectKey);
         }
 
-        private void OnDrop(DragDropGridComponent component, int objectKey, Vector2 dropPos)
+        private void OnDrop(DragDropBaseComponent component, int objectKey, Vector2 dropPos)
         {
             if (dragTransform != null)
             {
@@ -61,7 +60,7 @@ namespace DiceGame
             }
         }
 
-        private void TryDrop(DragDropGridComponent component, int key)
+        private void TryDrop(DragDropBaseComponent component, int key)
         {
             if (component.TryDropObjectByKey(key, dragTransform))
             {

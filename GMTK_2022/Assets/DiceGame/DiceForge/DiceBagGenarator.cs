@@ -26,7 +26,7 @@ namespace DiceGame
                 var diceCube = Instantiate(diceCubePrefab, new Vector3(worldPos.x, worldPos.y, 0), Quaternion.identity);
                 diceCube.InitDice(dice);
 
-                diceBagGridComponent.DropNextAvailable(diceCube.gameObject.transform);
+                diceBagGridComponent.TryDropObjectByKey(i, diceCube.gameObject.transform);
             }
         }
 

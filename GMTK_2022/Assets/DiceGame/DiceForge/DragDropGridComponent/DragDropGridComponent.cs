@@ -1,23 +1,14 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace DiceGame
 {
-    public class DragDropGridComponent : MonoBehaviour
+    public class DragDropGridComponent : DragDropBaseComponent
     {
-        [SerializeField] public UnityEvent<DragDropGridComponent, int, Vector2> onDrag;
-        [SerializeField] public UnityEvent<DragDropGridComponent, int, Vector2> onDrop;
-
-        [Header("Without follow")]
         [SerializeField] float spawnzoneHeightPx = 125;
         [SerializeField] float spawnzoneSidePaddingPx = 25;
         [SerializeField] float spawnzoneBottomPaddingPx = 25;
         [SerializeField] float spawnzoneGridSizePx = 25;
-
-        [Header("With follow")]
-        [SerializeField] Transform followObject;
 
         DragDropGridComponentGizmos gizmos = new DragDropGridComponentGizmos();
 
@@ -35,21 +26,14 @@ namespace DiceGame
             return (Camera.main.ScreenToWorldPoint(Vector2.one) - Camera.main.ScreenToWorldPoint(Vector2.zero)).x;
         }
 
-        public void DropNextAvailable(Transform transform)
-        {
-            var nextKey = placedObject.Count <= 0 ? 0 : placedObject.Keys.Max() + 1;
-            placedObject[nextKey] = transform;
-            transform.SetParent(this.transform);
-        }
-
-        public Transform DragObjectByKey(int objectKey)
+        public override Transform DragObjectByKey(int objectKey)
         {
             var obj = placedObject[objectKey];
             placedObject.Remove(objectKey);
             return obj;
         }
 
-        public bool TryDropObjectByKey(int dragKey, Transform transform)
+        public override bool TryDropObjectByKey(int dragKey, Transform transform)
         {
             if (placedObject.ContainsKey(dragKey))
             {
@@ -66,10 +50,6 @@ namespace DiceGame
             var spanwSizePos = Camera.main.ScreenToWorldPoint(new Vector2(Camera.main.pixelWidth - spawnzoneSidePaddingPx, spawnzoneBottomPaddingPx + spawnzoneHeightPx));
             var spawnSize = spanwSizePos - spawnPos;
 
-            if (followObject != null)
-            {
-                return new Rect(followObject.position - spawnSize / 2, spawnSize);
-            }
             return new Rect(spawnPos, spawnSize);
         }
 
