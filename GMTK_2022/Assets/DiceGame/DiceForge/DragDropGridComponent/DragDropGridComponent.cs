@@ -13,6 +13,8 @@ namespace DiceGame
         DragDropGridComponentGizmos gizmos = new DragDropGridComponentGizmos();
 
         Dictionary<int, Transform> placedObject = new Dictionary<int, Transform>();
+        Dictionary<int, float> placedObjectsTime = new Dictionary<int, float>();
+        Dictionary<int, Vector2> placedObjectsStartPos = new Dictionary<int, Vector2>();
 
         float screenToWorldConversion = 0;
 
@@ -41,6 +43,8 @@ namespace DiceGame
             }
             placedObject[dragKey] = transform;
             transform.SetParent(this.transform);
+            placedObjectsTime[dragKey] = Time.realtimeSinceStartup;
+            placedObjectsStartPos[dragKey] = transform.position;
             return true;
         }
 
@@ -86,7 +90,15 @@ namespace DiceGame
 
                 var x = xIndex * xStep + (xStep / 2);
                 var y = yIndex * yStep + (yStep / 2);
-                placedObject[objectKey].position = spawnZone.position + new Vector2(x, y);
+
+                var p = Time.realtimeSinceStartup - placedObjectsTime[objectKey];
+                p *= 3;
+                if (p > 1) p = 1;
+
+                var targetPos = spawnZone.position + new Vector2(x, y);
+                var t = EasingFunction.EaseInOutSine(0, 1, p);
+
+                placedObject[objectKey].position = Vector2.Lerp(placedObjectsStartPos[objectKey], targetPos, t);
             }
         }
 

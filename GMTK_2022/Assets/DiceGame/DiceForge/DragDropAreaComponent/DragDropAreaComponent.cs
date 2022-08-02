@@ -10,15 +10,10 @@ namespace DiceGame
         DragDropAreaComponentGizmos gizmos = new DragDropAreaComponentGizmos();
 
         Transform placedObject = null;
+        float placedObjectTime = 0;
+        Vector2 placedObjectStartPos;
 
         bool isHoverArea;
-        float screenToWorldConversion = 0;
-
-
-        private void Start()
-        {
-            screenToWorldConversion = GetScreenToWorldConversion();
-        }
 
         private static float GetScreenToWorldConversion()
         {
@@ -45,6 +40,8 @@ namespace DiceGame
 
             placedObject = transform;
             transform.SetParent(this.transform);
+            placedObjectTime = Time.realtimeSinceStartup;
+            placedObjectStartPos = transform.position;
             return true;
         }
 
@@ -73,7 +70,13 @@ namespace DiceGame
         {
             if (placedObject == true)
             {
-                placedObject.position = area.position + area.size / 2;
+                var p = Time.realtimeSinceStartup - placedObjectTime;
+                p *= 3;
+                if (p > 1) p = 1;
+
+                var targetPos = area.position + area.size / 2;
+                var t = EasingFunction.EaseInOutSine(0, 1, p);
+                placedObject.position = Vector2.Lerp(placedObjectStartPos, targetPos, t);
             }
         }
 
