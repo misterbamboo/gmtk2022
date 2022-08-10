@@ -48,6 +48,11 @@ namespace DiceGame
         {
             return faces[(int)side - 1];
         }
+
+        public void SetFace(FaceSides side, Face face)
+        {
+            faces[(int)side - 1] = face;
+        }
     }
 }
 

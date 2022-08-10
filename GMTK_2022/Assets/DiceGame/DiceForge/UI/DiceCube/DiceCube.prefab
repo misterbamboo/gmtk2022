@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1666400680839658363}
   - component: {fileID: 1666400680839658362}
   - component: {fileID: 1666400680839658361}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: BackFace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 1666400681149296544}
   - component: {fileID: 1666400681149296551}
   - component: {fileID: 1666400681149296550}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: LeftFace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 1666400681337900399}
   - component: {fileID: 1666400681337900398}
   - component: {fileID: 1666400681337900397}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: TopFace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -306,7 +306,7 @@ GameObject:
   - component: {fileID: 1666400681581745258}
   - component: {fileID: 1666400681581745257}
   - component: {fileID: 1666400681581745256}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: BottomFace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -404,7 +404,7 @@ GameObject:
   - component: {fileID: 1666400681614769484}
   - component: {fileID: 1666400681614769475}
   - component: {fileID: 1666400681614769474}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FrontFace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -502,7 +502,7 @@ GameObject:
   - component: {fileID: 1666400682285033283}
   - component: {fileID: 1666400682285033282}
   - component: {fileID: 1666400682285033281}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: RightFace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -600,7 +600,7 @@ GameObject:
   - component: {fileID: 1666400682529111592}
   - component: {fileID: 1666400682529111594}
   - component: {fileID: 1052603279018947523}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: DiceCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
